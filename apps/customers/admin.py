@@ -7,9 +7,8 @@ class AddressAdmin(admin.ModelAdmin):
     search_fields = ('postal_code', 'street', )
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('nickname', 'document', 'email', 'spent_total', )
+    list_display = ('full_name', 'document', 'email', 'spent_total', )
     search_fields = ('document', 'nickname', 'full_name', 'email', )
-
 
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Address, AddressAdmin)

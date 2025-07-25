@@ -1,6 +1,6 @@
 from django.db import models
 
-class Customer(models.Model):
+class Customer(models.Model): # TABELA CLIENTE 
     full_name = models.CharField(max_length=255, verbose_name='Nome Completo')
     nickname = models.CharField(max_length=100, blank=True, null=True, verbose_name='Nome ou Apelido')
     document = models.CharField(max_length=50, unique=True, verbose_name='Cpf ou Cnpj')
@@ -13,7 +13,7 @@ class Customer(models.Model):
         return self.full_name
 
 
-class Address(models.Model):
+class Address(models.Model): # TABELA ENDEREÇO
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='addresses')
     street = models.CharField(max_length=255, verbose_name='Rua')
     number = models.CharField(max_length=20, verbose_name='Numero')
