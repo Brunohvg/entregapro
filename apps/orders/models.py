@@ -1,3 +1,5 @@
+# your_project/orders/models.py (assumindo que você tenha uma app 'orders' ou similar)
+
 from django.db import models
 from apps.customers.models import Customer
 from django.db.models import Sum
@@ -31,14 +33,20 @@ class Order(models.Model):  # TABELA PEDIDO
     delivery_status = models.CharField(
         max_length=20,
         choices=DeliveryStatus.choices,
-        default=DeliveryStatus.PENDING
+        default=DeliveryStatus.PENDING,
+        verbose_name='Status Entrega' # Adicionado verbose_name aqui
     )
-    total_amount = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    total_amount = models.FloatField(verbose_name='Valor Total') # Adicionado verbose_name
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado Em') # Adicionado verbose_name
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado Em') # Adicionado verbose_name
+
+    class Meta:
+        verbose_name = "Pedido"
+        verbose_name_plural = "Pedidos"
+        ordering = ['-created_at'] # Ordenar por data de criação decrescente
 
     def __str__(self):
-        return f"Order #{self.order_number} - {self.customer.full_name}"
+        return f"Pedido #{self.order_number} - {self.customer.full_name}"
     
     def total_orders_month(year=None, month=None):
         """
@@ -56,6 +64,4 @@ class Order(models.Model):  # TABELA PEDIDO
         return Order.objects.filter(
             created_at__year=year,
             created_at__month=month
-        ).aggregate(total=Sum("total_amount"))["total"] or 0 
-    
-    
+        ).aggregate(total=Sum("total_amount"))["total"] or 0

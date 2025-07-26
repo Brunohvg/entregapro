@@ -8,4 +8,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),  # Inclui as URLs da aplicação 'accounts'
+    path('orders/', include('apps.orders.urls')), # Inclui as URLs da aplicação 'orders'
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

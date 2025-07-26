@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Minha Página Personalizada{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title fw-semibold mb-4">Bem-vindo à Minha Página</h5>
+    <p class="mb-0">Este é o conteúdo exclusivo da minha página, que estende o template base.</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  console.log("Este é um script extra para minha página.");
+</script>
+{% endblock %}

@@ -19,7 +19,7 @@ def user_login(request):
                 login(request, user)
                 messages.success(request, f"Bem-vindo de volta, {username}!")
                 # Redireciona para o dashboard após o login bem-sucedido
-                return redirect('core:dashboard')
+                return redirect('orders:order_list')
             else:
                 messages.error(request, "Nome de usuário ou senha inválidos.")
         else:
