@@ -16,9 +16,11 @@ class DeliveryStatus(models.TextChoices):
 
 
 class PaymentStatus(models.TextChoices):
+
     PENDING = "PENDING", "Aguardando pagamento"
     PAID = "PAID", "Pagamento aprovado"
     REFUSED = "REFUSED", "Pagamento recusado"
+
 
 
 class Order(models.Model):  # TABELA PEDIDO
