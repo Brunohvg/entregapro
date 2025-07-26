@@ -1,23 +1,50 @@
 {% extends 'base_auth.html' %}
+{% load widget_tweaks %}
 {% load static %}
 
-{% block title %}Modernize Free - Register{% endblock %}
+{% block title %}Bibelo Express - Register{% endblock %}
 
 {% block auth_content %}
+
 <form method="post">
   {% csrf_token %} {# Importante para segurança em formulários Django #}
+    {# Campo para o Nome de Usuário (username) #}
   <div class="mb-3">
-    <label for="id_name" class="form-label">Name</label>
-    <input type="text" class="form-control" id="id_name" name="name" aria-describedby="textHelp">
+      <label for="{{ form.username.id_for_label }}" class="form-label">Nome de Usuário</label>
+      {% render_field form.username class="form-control" placeholder="Digite seu nome de usuário" %}
+      {% if form.username.errors %}
+          <div class="text-danger small mt-1">
+              {% for error in form.username.errors %}
+                  {{ error }}
+              {% endfor %}
+          </div>
+      {% endif %}
   </div>
+
   <div class="mb-3">
-    <label for="id_email" class="form-label">Email Address</label>
-    <input type="email" class="form-control" id="id_email" name="email" aria-describedby="emailHelp">
+    <label for="{{ form.password1.id_for_label }}" class="form-label">Senha</label>
+    {% render_field form.password1 class="form-control" placeholder="Senha do usuario" %}
+    {% if form.password1.errors %}
+        <div class="text-danger small mt-1">
+            {% for error in form.password1.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
   </div>
-  <div class="mb-4">
-    <label for="id_password" class="form-label">Password</label>
-    <input type="password" class="form-control" id="id_password" name="password">
+
+  <div class="mb-3">
+    <label for="{{ form.password1.id_for_label }}" class="form-label">Confirmar senha</label>
+    {% render_field form.password2 class="form-control" placeholder="Repita sua senha" %}
+    {% if form.password2.errors %}
+        <div class="text-danger small mt-1">
+            {% for error in form.password2.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
   </div>
+
   <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign Up</button>
   <div class="d-flex align-items-center justify-content-center">
     <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
