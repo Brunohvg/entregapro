@@ -6,20 +6,19 @@ from django.db.models import Sum
 from django.utils import timezone
 
 class DeliveryStatus(models.TextChoices):
-    PENDING = "PENDING", "Aguardando coleta"
-    PICKED_UP = "PICKED_UP", "Coletado pelo motoboy"
-    ON_THE_WAY = "ON_THE_WAY", "Em rota de entrega"
-    DELIVERED = "DELIVERED", "Entregue ao destinatário"
-    FAILED = "FAILED", "Entrega não realizada"
-    RETURNED = "RETURNED", "Pedido devolvido ao remetente"
-    CANCELLED = "CANCELLED", "Entrega cancelada"
+    PENDING = "PENDING", "Aguardando Coleta" 
+    PICKED_UP = "PICKED_UP", "Coletado"
+    ON_THE_WAY = "ON_THE_WAY", "Em Entrega"
+    DELIVERED = "DELIVERED", "Entregue"
+    FAILED = "FAILED", "Não Entregue"
+    RETURNED = "RETURNED", "Devolvido"
+    CANCELLED = "CANCELLED", "Cancelado"
 
 
 class PaymentStatus(models.TextChoices):
-
-    PENDING = "PENDING", "Aguardando pagamento"
-    PAID = "PAID", "Pagamento aprovado"
-    REFUSED = "REFUSED", "Pagamento recusado"
+    PENDING = "PENDING", "Pendente"
+    PAID = "PAID", "Aprovado"
+    REFUSED = "REFUSED", "Recusado"
 
 
 

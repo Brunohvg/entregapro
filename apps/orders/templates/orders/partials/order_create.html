@@ -1,0 +1,277 @@
+
+<div class="card bg-light-info shadow-none position-relative overflow-hidden">
+    <div class="card-body px-4 py-3">
+        <div class="row align-items-center">
+            <div class="col-9">
+                <h4 class="fw-semibold mb-8">Criar Pedido</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="#">Início</a></li> {# Link placeholder #}
+                        <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="#">Pedidos</a></li> {# Link placeholder #}
+                        <li class="breadcrumb-item" aria-current="page">Novo Pedido</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-3">
+                <div class="text-center mb-n5">
+                    <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/breadcrumb/ChatBc.png" alt="" class="img-fluid mb-n4">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title fw-semibold mb-4">Detalhes do Pedido</h5>
+        <form method="post" id="order-form">
+            {% csrf_token %} {# Importante para segurança em formulários Django #}
+
+            {# Mensagens de erro ou sucesso (exemplo de renderização, o conteúdo vem da view) #}
+            {% comment %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endcomment %}
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="id_customer" class="form-label">Cliente</label>
+                        <select name="customer" id="id_customer" class="form-select">
+                            <option value="">Selecione um cliente</option>
+                            {# Opções de clientes seriam renderizadas aqui pela view (ex: form.customer) #}
+                            <option value="1">Cliente A (Exemplo)</option>
+                            <option value="2">Cliente B (Exemplo)</option>
+                        </select>
+                        {# {% if form.customer.errors %}<div class="form-text text-danger">{{ form.customer.errors }}</div>{% endif %} #}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="id_order_number" class="form-label">Número da Venda</label>
+                        <input type="text" name="order_number" id="id_order_number" class="form-control" readonly value="Gerado Automaticamente">
+                        {# O número da venda pode ser gerado no backend e exibido aqui ou ser um campo direto #}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="id_total_amount" class="form-label">Valor Total da Venda</label>
+                        <input type="number" name="total_amount" id="id_total_amount" class="form-control" step="0.01" min="0" required placeholder="0,00">
+                        {# {% if form.total_amount.errors %}<div class="form-text text-danger">{{ form.total_amount.errors }}</div>{% endif %} #}
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+
+            <h5 class="card-title fw-semibold mb-4">Status e Endereço de Entrega</h5>
+            <div class="row mb-4">
+                 <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="id_payment_status" class="form-label">Status do Pagamento</label>
+                        <select name="payment_status" id="id_payment_status" class="form-select">
+                            {# Opções de status de pagamento seriam renderizadas aqui pela view (ex: form.payment_status) #}
+                            <option value="PENDING">Pendente</option>
+                            <option value="PAID">Aprovado</option>
+                            <option value="REFUSED">Recusado</option>
+                        </select>
+                        {# {% if form.payment_status.errors %}<div class="form-text text-danger">{{ form.payment_status.errors }}</div>{% endif %} #}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="id_delivery_status" class="form-label">Status da Entrega</label>
+                        <select name="delivery_status" id="id_delivery_status" class="form-select">
+                            {# Opções de status de entrega seriam renderizadas aqui pela view (ex: form.delivery_status) #}
+                            <option value="PENDING">Aguardando Coleta</option>
+                            <option value="PICKED_UP">Coletado</option>
+                            <option value="ON_THE_WAY">Em Entrega</option>
+                            <option value="DELIVERED">Entregue</option>
+                            <option value="FAILED">Não Entregue</option>
+                            <option value="RETURNED">Devolvido</option>
+                            <option value="CANCELLED">Cancelado</option>
+                        </select>
+                        {# {% if form.delivery_status.errors %}<div class="form-text text-danger">{{ form.delivery_status.errors }}</div>{% endif %} #}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="id_cep" class="form-label">CEP</label>
+                        <input type="text" name="cep" id="id_cep" class="form-control" placeholder="Ex: 00000-000" maxlength="9">
+                        <div class="form-text" id="cep-help-text">Digite o CEP para preencher o endereço.</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="id_number" class="form-label">Número</label>
+                        <input type="text" name="number" id="id_number" class="form-control" placeholder="Número">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="id_street" class="form-label">Rua</label>
+                        <input type="text" name="street" id="id_street" class="form-control" readonly placeholder="Preenchido automaticamente pelo CEP">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="id_neighborhood" class="form-label">Bairro</label>
+                        <input type="text" name="neighborhood" id="id_neighborhood" class="form-control" readonly placeholder="Preenchido automaticamente pelo CEP">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="id_city" class="form-label">Cidade</label>
+                        <input type="text" name="city" id="id_city" class="form-control" readonly placeholder="Preenchido automaticamente pelo CEP">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="id_state" class="form-label">Estado</label>
+                        <input type="text" name="state" id="id_state" class="form-control" readonly placeholder="Preenchido automaticamente pelo CEP">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="id_complement" class="form-label">Complemento (Opcional)</label>
+                        <input type="text" name="complement" id="id_complement" class="form-control" placeholder="Ex: Apt 101, Bloco B">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="ti ti-check me-1"></i> Salvar Pedido
+                </button>
+                <a href="#" class="btn btn-secondary"> {# Link placeholder #}
+                    <i class="ti ti-x me-1"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cepInput = document.getElementById('id_cep');
+        const streetInput = document.getElementById('id_street');
+        const neighborhoodInput = document.getElementById('id_neighborhood');
+        const cityInput = document.getElementById('id_city');
+        const stateInput = document.getElementById('id_state'); // Adicionado campo para Estado
+        const numberInput = document.getElementById('id_number');
+        const cepHelpText = document.getElementById('cep-help-text');
+
+        // Função para limpar os campos de endereço
+        function clearAddressFields() {
+            streetInput.value = '';
+            neighborhoodInput.value = '';
+            cityInput.value = '';
+            stateInput.value = '';
+            cepHelpText.textContent = 'Digite o CEP para preencher o endereço.';
+            cepHelpText.classList.remove('text-danger', 'text-success');
+        }
+
+        // Função para preencher os campos de endereço com os dados da API
+        function fillAddressFields(data) {
+            streetInput.value = data.logradouro || '';
+            neighborhoodInput.value = data.bairro || '';
+            cityInput.value = data.localidade || '';
+            stateInput.value = data.uf || ''; // Preenche o estado
+
+            // Foca no campo de número após preencher o endereço
+            numberInput.focus();
+
+            cepHelpText.textContent = 'Endereço preenchido com sucesso!';
+            cepHelpText.classList.remove('text-danger');
+            cepHelpText.classList.add('text-success');
+        }
+
+        // Função para buscar o CEP na API ViaCEP
+        function searchCep() {
+            let cep = cepInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+            if (cep.length === 8) {
+                cepHelpText.textContent = 'Buscando CEP...';
+                cepHelpText.classList.remove('text-success', 'text-danger');
+                
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            fillAddressFields(data);
+                        } else {
+                            clearAddressFields();
+                            cepHelpText.textContent = 'CEP não encontrado. Por favor, verifique.';
+                            cepHelpText.classList.add('text-danger');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar CEP:', error);
+                        clearAddressFields();
+                        cepHelpText.textContent = 'Erro ao buscar CEP. Tente novamente.';
+                        cepHelpText.classList.add('text-danger');
+                    });
+            } else {
+                clearAddressFields();
+            }
+        }
+
+        // Adiciona um listener para o evento 'blur' (quando o campo perde o foco)
+        cepInput.addEventListener('blur', searchCep);
+
+        // Adiciona uma máscara para o CEP (opcional, mas melhora a UX)
+        cepInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '-' + value.substring(5, 8);
+            }
+            e.target.value = value;
+        });
+
+        // --- Campos de Venda e Cliente ---
+
+        // Exemplo: Gerar o número da venda no cliente (idealmente feito no backend)
+        // Se a view passar um order_number gerado, remova este bloco.
+        const orderNumberInput = document.getElementById('id_order_number');
+        if (orderNumberInput && orderNumberInput.value === 'Gerado Automaticamente') {
+             // Formato simples: AnoMêsDia-HHMMSS (ex: 20250726-221530)
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            orderNumberInput.value = `${year}${month}${day}-${hours}${minutes}${seconds}`;
+        }
+
+        // Função para formatar o campo de valor total da venda para moeda brasileira
+        const totalAmountInput = document.getElementById('id_total_amount');
+        if (totalAmountInput) {
+            totalAmountInput.addEventListener('blur', function() {
+                let value = parseFloat(this.value.replace(',', '.')) || 0;
+                this.value = value.toFixed(2).replace('.', ',');
+            });
+            // Garante a formatação inicial se houver um valor
+            totalAmountInput.value = (parseFloat(totalAmountInput.value) || 0).toFixed(2).replace('.', ',');
+        }
+
+        // O restante dos campos (Cliente, Status Pagamento, Status Entrega)
+        // são preenchidos via Django forms pela sua view, como no exemplo anterior.
+    });
+</script>
+{% endblock %}
