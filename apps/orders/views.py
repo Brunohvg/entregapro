@@ -5,8 +5,7 @@ from django.contrib.auth.decorators import login_required
 from apps.orders.models import Order # Assumindo que Order está na app 'orders'
 from apps.customers.models import Customer # Assumindo que Customer está na app 'customers'
 from django.views import View
-
-
+from .forms import CustomerForm
 class OrderList(View):
     def get(self, request):
         orders = Order.objects.all().select_related('customer') # 'select_related' para otimizar o acesso ao customer
@@ -18,5 +17,10 @@ class OrderList(View):
         }
         return render(request, 'orders/order_list.html', context)
 
-    
+
+class OrderCreated(View):
+    def get(self, request):
+        form = CustomerForm()
+
+        return render(request, 'orders/order_created.html', context={'form':form})
 
