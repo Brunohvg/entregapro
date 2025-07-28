@@ -1,0 +1,16 @@
+<!-- your_project/orders/order_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Detalhes do Pedido #{{ order.order_number }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm rounded-3">
+        <div class="card-body p-4">
+            <!-- Inclui o partial que contém os detalhes do pedido -->
+            {% include 'orders/partials/_order_detail_view.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

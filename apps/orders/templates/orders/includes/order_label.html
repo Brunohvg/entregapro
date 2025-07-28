@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta de Envio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            background: #ffffffff;
+        }
+
+        .shipping-label {
+            width: 85mm;
+            border: 2px solid #000;
+            background: #fff;
+            padding: 12px;
+            margin: 20px auto;
+            border-radius: 8px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .order-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+            background-color: #fff2f2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #e74c3c;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
+        .section {
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+        }
+
+        .section:not(:last-child) {
+            border-bottom: 1px dashed #bdc3c7;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #34495e;
+            background-color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .info-line {
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+
+        .info-line strong {
+            color: #34495e;
+            display: inline-block;
+            min-width: 50px;
+        }
+
+        .customer-name {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .address-main {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            font-size: 9px;
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 10px;
+            background-color: #3498db;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .qr-placeholder {
+            width: 35px;
+            height: 35px;
+            border: 1px solid #bdc3c7;
+            background: #ecf0f1;
+            text-align: center;
+            font-size: 8px;
+            color: #7f8c8d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .delivery-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 6px;
+            margin-top: 6px;
+        }
+
+        .delivery-info .info-line {
+            font-size: 9px;
+            color: #856404;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 8px;
+            color: #7f8c8d;
+            border-top: 1px solid #ccc;
+            margin-top: 10px;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="shipping-label">
+    <!-- Cabeçalho -->
+    <div class="header">
+        <div class="company-name">ZAP ROTA BIBELÔ</div>
+        <div class="order-number">#{{ order.order_number }}</div>
+    </div>
+
+    <!-- Destinatário -->
+    <div class="section">
+        <div class="section-title">👤 DESTINATÁRIO</div>
+        <div class="customer-name">{{ order.customer.full_name }}</div>
+        <div class="info-line"><strong>Tel:</strong> {{ order.customer.phone }}</div>
+        {% if order.customer.email %}
+        <div class="info-line"><strong>Email:</strong> {{ order.customer.email }}</div>
+        {% endif %}
+    </div>
+
+    <!-- Endereço -->
+    {% if primary_address %}
+    <div class="section">
+        <div class="section-title">📍 ENDEREÇO DE ENTREGA</div>
+        <div class="address-main">{{ primary_address.street }}, {{ primary_address.number }}</div>
+        {% if primary_address.complement %}
+        <div class="info-line">{{ primary_address.complement }}</div>
+        {% endif %}
+        <div class="info-line"><strong>Bairro:</strong> {{ primary_address.neighborhood }}</div>
+        <div class="info-line"><strong>Cidade:</strong> {{ primary_address.city }}</div>
+        <div class="info-line"><strong>CEP:</strong> {{ primary_address.postal_code }}</div>
+        {% if primary_address.reference %}
+        <div class="info-line"><strong>Ref:</strong> {{ primary_address.reference }}</div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Status -->
+    <div class="section">
+        <div class="section-title">📦 STATUS DO PEDIDO</div>
+        <div class="status-container">
+            <span class="status-badge">{{ order.get_delivery_status_display }}</span>
+            <div class="qr-placeholder">QR</div>
+        </div>
+
+        <div class="delivery-info">
+            <div class="info-line"><strong>Valor:</strong> R$ {{ order.total_amount|floatformat:2 }}</div>
+            <div class="info-line"><strong>Data:</strong> {{ order.created_at|date:"d/m/Y H:i" }}</div>
+            {% if order.observations %}
+            <div class="info-line"><strong>Obs:</strong> {{ order.observations|truncatechars:50 }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="footer">
+        Entrega rápida e segura 🏍️
+    </div>
+</div>
+</body>
+</html>

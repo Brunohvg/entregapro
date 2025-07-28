@@ -23,7 +23,7 @@ class Address(models.Model): # TABELA ENDEREÇO
     city = models.CharField(max_length=100, verbose_name='Cidade')
     postal_code = models.CharField(max_length=20, verbose_name='Cep')
     reference = models.CharField(max_length=255, blank=True, null=True, verbose_name='Referencia')
-    is_primary = models.BooleanField(default=False, verbose_name='Endereço principal')
+    is_primary = models.BooleanField(default=True, verbose_name='Endereço principal')
 
 
     def __str__(self):

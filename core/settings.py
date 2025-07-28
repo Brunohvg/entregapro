@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.accounts',
     'widget_tweaks',
-    'crispy_forms',
     'django.contrib.humanize'
 ]
 
