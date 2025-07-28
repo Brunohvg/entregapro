@@ -2,7 +2,7 @@ from .models import Order
 from apps.customers.models import Customer
 from django.forms import ModelForm
 
-class CustomerForm(ModelForm):
+class OrderForm(ModelForm):
     class Meta:
-        model = Customer
-        fields = ["full_name","nickname", 'document', 'email']
+        model = Order
+        fields = ['order_number', 'payment_status', 'delivery_status', 'total_amount', 'observations']

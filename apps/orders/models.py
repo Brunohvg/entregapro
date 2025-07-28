@@ -25,6 +25,7 @@ class PaymentStatus(models.TextChoices):
 class Order(models.Model):  # TABELA PEDIDO
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     order_number = models.CharField(max_length=50, unique=True, verbose_name='Nº Pedido')
+    observations = models.CharField(max_length=250, blank=True, null=True, verbose_name='Observações' )    
     payment_status = models.CharField(
         max_length=20,
         choices=PaymentStatus.choices,

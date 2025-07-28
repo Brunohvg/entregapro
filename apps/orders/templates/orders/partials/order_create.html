@@ -1,1 +1,240 @@
-{{form}}
+{% load widget_tweaks %}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  <!-- Seção: Cliente -->
+  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
+    <h5 class="mb-3"><i class="bi bi-person-circle me-2"></i>Dados do Cliente</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="full_name" class="form-label">Nome Completo</label>
+        {% render_field form_customer.full_name class="form-control" placeholder="Nome completo" %}
+        {% if form_customer.full_name.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_customer.full_name.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="phone" class="form-label">Telefone</label>
+        {% render_field form_customer.phone class="form-control" placeholder="(99) 99999-9999" %}
+        {% if form_customer.phone.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_customer.phone.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        {% render_field form_customer.email class="form-control" placeholder="cliente@email.com" %}
+        {% if form_customer.email.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_customer.email.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="document" class="form-label">CPF ou CNPJ</label>
+        {% render_field form_customer.document class="form-control" placeholder="000.000.000-00" %}
+        {% if form_customer.document.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_customer.document.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção: Endereço -->
+  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
+    <h5 class="mb-3"><i class="bi bi-geo-alt-fill me-2"></i>Endereço de Entrega</h5>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="postal_code" class="form-label">CEP</label>
+        {% render_field form_address.postal_code class="form-control" placeholder="00000-000" id="id_cep" %}
+        {% if form_address.postal_code.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.postal_code.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-8 mb-3">
+        <label for="street" class="form-label">Rua</label>
+        {% render_field form_address.street class="form-control" id="id_rua" %}
+        {% if form_address.street.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.street.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="number" class="form-label">Número</label>
+        {% render_field form_address.number class="form-control" %}
+        {% if form_address.number.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.number.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="neighborhood" class="form-label">Bairro</label>
+        {% render_field form_address.neighborhood class="form-control" id="id_bairro" %}
+        {% if form_address.neighborhood.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.neighborhood.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="city" class="form-label">Cidade</label>
+        {% render_field form_address.city class="form-control" id="id_cidade" %}
+        {% if form_address.city.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.city.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="complement" class="form-label">Complemento</label>
+        {% render_field form_address.complement class="form-control" %}
+        {% if form_address.complement.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.complement.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="reference" class="form-label">Referência</label>
+        {% render_field form_address.reference class="form-control" %}
+        {% if form_address.reference.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form_address.reference.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção: Pedido -->
+  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
+    <h5 class="mb-3"><i class="bi bi-box-seam me-2"></i>Detalhes do Pedido</h5>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="order_number" class="form-label">Nº do Pedido</label>
+        {% render_field form.order_number class="form-control" %}
+        {% if form.order_number.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.order_number.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="payment_status" class="form-label">Status do Pagamento</label>
+        {% render_field form.payment_status class="form-control" %}
+        {% if form.payment_status.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.payment_status.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="delivery_status" class="form-label">Status da Entrega</label>
+        {% render_field form.delivery_status class="form-control" %}
+        {% if form.delivery_status.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.delivery_status.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="total_amount" class="form-label">Valor Total</label>
+        {% render_field form.total_amount class="form-control" placeholder="R$ 0,00" %}
+        {% if form.total_amount.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.total_amount.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="observations" class="form-label">Observações</label>
+        {% render_field form.observations class="form-control" placeholder="Instruções, observações..." %}
+        {% if form.observations.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.observations.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão -->
+  <div class="text-end">
+    <button type="submit" class="btn btn-success btn-lg">
+      <i class="bi bi-save me-2"></i>Salvar Pedido
+    </button>
+  </div>
+</form>
+
+<!-- CEP Auto preenchimento -->
+<script>
+document.getElementById("id_cep").addEventListener("blur", function() {
+  const cep = this.value.replace(/\D/g, "");
+  if (cep.length === 8) {
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      .then(response => response.json())
+      .then(data => {
+        if (!("erro" in data)) {
+          document.getElementById("id_rua").value = data.logradouro;
+          document.getElementById("id_bairro").value = data.bairro;
+          document.getElementById("id_cidade").value = data.localidade;
+        } else {
+          alert("CEP não encontrado.");
+        }
+      })
+      .catch(() => {
+        alert("Erro ao buscar CEP.");
+      });
+  }
+});
+</script>

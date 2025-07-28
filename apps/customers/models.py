@@ -4,6 +4,7 @@ class Customer(models.Model): # TABELA CLIENTE
     full_name = models.CharField(max_length=255, verbose_name='Nome Completo')
     nickname = models.CharField(max_length=100, blank=True, null=True, verbose_name='Nome ou Apelido')
     document = models.CharField(max_length=50, unique=True, verbose_name='Cpf ou Cnpj')
+    phone = models.CharField(max_length=50, verbose_name='Celular')
     email = models.EmailField(unique=True, blank=True, null=True, verbose_name='E-mail')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
