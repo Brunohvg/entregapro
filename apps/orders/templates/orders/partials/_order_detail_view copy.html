@@ -4,24 +4,22 @@
     /* Estilos Gerais para Cards e Seções */
     .card {
         border-radius: 0.75rem; /* Cantos mais arredondados para um visual suave */
-        border: 1px solid #e9ecef; /* Borda sutil para definição */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* Sombra mais sutil */
-        transition: all 0.15s ease-in-out; /* Transição mais rápida e sutil */
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra mais sutil */
+        transition: all 0.2s ease-in-out;
     }
 
     .card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra ligeiramente mais pronunciada no hover */
-        transform: translateY(-2px); /* Efeito sutil de elevação */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); /* Sombra ligeiramente mais pronunciada no hover */
     }
 
     .card-header {
-        background-color: #fcfcfc; /* Fundo muito claro para o cabeçalho */
-        border-bottom: 1px solid #f0f0f0; /* Linha divisória muito suave */
+        background-color: #f8f9fa; /* Fundo mais claro para o cabeçalho */
+        border-bottom: 1px solid #e9ecef; /* Linha divisória suave */
         font-weight: 600;
-        color: #495057; /* Cor de texto mais neutra */
+        color: #343a40;
         border-top-left-radius: 0.75rem;
         border-top-right-radius: 0.75rem;
-        padding: 1rem 1.25rem; /* Padding padrão do Bootstrap */
     }
 
     /* Estilos para Badges de Status */
@@ -52,7 +50,7 @@
         top: 35px;
         width: 2px;
         height: calc(100% - 35px); /* Ajusta a altura da linha */
-        background-color: #e9ecef; /* Cor da linha inativa */
+        background-color: #dee2e6; /* Cor da linha inativa */
         z-index: 1;
     }
 
@@ -82,7 +80,7 @@
     .status-step.active .status-icon {
         background-color: #28a745; /* Verde para ativo */
         color: white;
-        box-shadow: none; /* Removido sombra para minimalismo */
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2); /* Sombra mais suave */
     }
 
     .status-step.inactive .status-icon {
@@ -93,30 +91,24 @@
     /* Cartões de Métrica (Valor Total, Pagamento, Entrega, Cliente) */
     .metric-card {
         background-color: #ffffff; /* Fundo branco */
-        border: 1px solid #f0f0f0; /* Borda muito suave */
+        border: 1px solid #e9ecef; /* Borda suave */
         color: #343a40;
-        box-shadow: none; /* Removido sombra */
-        transition: none; /* Removido transição */
-    }
-
-    .metric-card:hover {
-        transform: none; /* Removido efeito de elevação no hover */
-        box-shadow: none; /* Removido sombra no hover */
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .metric-card.success {
-        background-color: #f6fff8; /* Verde muito claro */
-        border-color: #d4edda; /* Borda sutil */
+        background-color: #e6ffed; /* Verde claro */
+        border-color: #a3e6b8;
     }
 
     .metric-card.warning {
-        background-color: #fffdf6; /* Laranja muito claro */
-        border-color: #ffeeba;
+        background-color: #fff3e6; /* Laranja claro */
+        border-color: #ffcc99;
     }
 
     .metric-card.info {
-        background-color: #f6fbff; /* Azul muito claro */
-        border-color: #bee5eb;
+        background-color: #e6f7ff; /* Azul claro */
+        border-color: #99e0ff;
     }
 
     .metric-card .card-body {
@@ -124,7 +116,7 @@
     }
 
     .metric-card i {
-        color: #6c757d; /* Cor de ícone mais neutra */
+        color: #007bff; /* Cor padrão para ícones */
     }
 
     .metric-card.success i { color: #28a745; }
@@ -135,22 +127,16 @@
     .info-card {
         background: white;
         border: 1px solid #e9ecef;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.02); /* Sombra ainda mais leve */
-        border-left: 4px solid #dee2e6; /* Borda esquerda muito sutil */
-        transition: none;
-    }
-
-    .info-card:hover {
-        box-shadow: 0 2px 6px rgba(0,0,0,0.04); /* Sombra no hover mais suave */
-        transform: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border-left: 4px solid #007bff; /* Borda esquerda sutil */
     }
 
     .address-card {
-        border-left-color: #28a745; /* Verde para endereço */
+        border-left: 4px solid #28a745; /* Verde para endereço */
     }
 
     .customer-card {
-        border-left-color: #ffc107; /* Amarelo para cliente */
+        border-left: 4px solid #ffc107; /* Amarelo para cliente */
     }
 
     .info-row {
@@ -158,7 +144,7 @@
         justify-content: space-between;
         align-items: flex-start; /* Alinha o texto ao topo */
         padding: 8px 0;
-        border-bottom: 1px dashed #f8f9fa; /* Linha pontilhada muito suave */
+        border-bottom: 1px dashed #f1f1f1; /* Linha pontilhada suave */
         font-size: 0.95em;
     }
 
@@ -181,16 +167,15 @@
 
     /* Botões de Ação */
     .action-button {
-        transition: all 0.15s ease;
-        border: 1px solid; /* Adiciona borda para botões outline */
-        box-shadow: none; /* Removido sombra */
+        transition: all 0.2s ease;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Sombra mais suave */
         border-radius: 0.5rem; /* Cantos arredondados */
         padding: 0.75rem 1rem; /* Padding ajustado */
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: left;
-        background-color: transparent; /* Fundo transparente para outline */
     }
 
     .action-button i {
@@ -199,18 +184,18 @@
     }
 
     .action-button:hover {
-        transform: none; /* Removido efeito de elevação no hover */
-        box-shadow: none; /* Removido sombra no hover */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
-    .action-button.btn-outline-primary { color: #007bff; border-color: #007bff; }
-    .action-button.btn-outline-primary:hover { background-color: #007bff; color: white; }
+    .action-button.btn-primary { background-color: #007bff; border-color: #007bff; }
+    .action-button.btn-primary:hover { background-color: #0056b3; border-color: #0056b3; }
 
-    .action-button.btn-outline-success { color: #28a745; border-color: #28a745; }
-    .action-button.btn-outline-success:hover { background-color: #28a745; color: white; }
+    .action-button.btn-success { background-color: #28a745; border-color: #28a745; }
+    .action-button.btn-success:hover { background-color: #1e7e34; border-color: #1e7e34; }
 
-    .action-button.btn-outline-info { color: #17a2b8; border-color: #17a2b8; }
-    .action-button.btn-outline-info:hover { background-color: #17a2b8; color: white; }
+    .action-button.btn-info { background-color: #17a2b8; border-color: #17a2b8; }
+    .action-button.btn-info:hover { background-color: #117a8b; border-color: #117a8b; }
 
     /* Botões Flutuantes (FAB) */
     .floating-actions {
@@ -233,13 +218,13 @@
         align-items: center;
         justify-content: center;
         font-size: 1.2rem; /* Tamanho do ícone ajustado */
-        transition: all 0.15s ease;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Sombra mais suave */
+        transition: all 0.2s ease;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2); /* Sombra suave */
     }
 
     .fab-button:hover {
         transform: scale(1.05); /* Efeito de escala mais sutil */
-        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
 
     /* Responsividade */
@@ -593,7 +578,7 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-outline-primary action-button w-100" onclick="printOrder()">
+                        <button type="button" class="btn btn-primary action-button w-100" onclick="printOrder()">
                             <i class="bi bi-printer-fill me-2"></i>
                             <div>
                                 <div class="fw-bold">Imprimir Pedido</div>
@@ -602,7 +587,7 @@
                         </button>
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-outline-success action-button w-100" onclick="generatePdf()">
+                        <button type="button" class="btn btn-success action-button w-100" onclick="generatePdf()">
                             <i class="bi bi-file-earmark-pdf-fill me-2"></i>
                             <div>
                                 <div class="fw-bold">Gerar PDF</div>
@@ -611,7 +596,7 @@
                         </button>
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-outline-info action-button w-100" onclick="printShippingLabel()">
+                        <button type="button" class="btn btn-info action-button w-100 text-white" onclick="printShippingLabel()">
                             <i class="bi bi-tag-fill me-2"></i>
                             <div>
                                 <div class="fw-bold">Etiqueta de Envio</div>
