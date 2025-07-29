@@ -81,16 +81,26 @@ OBJETIVO: Renderizar APENAS a tabela com a lista de pedidos.
                 <span class="order-date"> {{ order.created_at|date:"d/m/Y H:i" }} </span>
             </td>
             <td>
-                <div class="action-btn">
-                    <a href="{% url 'orders:gerar_pdf' order.id %}" target="_blank" class="btn btn-outline-primary">
-                    <i class="bi bi-printer me-1"></i> Gerar PDF
+                <div class="d-flex gap-2 justify-content-center align-items-center">
+                    <!-- Botão Ver Detalhes -->
+                    <a href="{% url 'orders:order_detail' order.id %}" 
+                    class="btn btn-outline-primary btn-sm" 
+                    title="Ver Detalhes">
+                        <i class="ti ti-eye fs-5 me-1"></i>
+                        <span class="d-none d-md-inline"></span>
                     </a>
 
-                    <a href="#" class="text-primary view-btn" title="Ver Detalhes">
-                        <i class="ti ti-eye fs-5"></i>
+                    <!-- Botão Gerar PDF -->
+                    <a href="{% url 'orders:gerar_pdf' order.id %}" 
+                    target="_blank" 
+                    class="btn btn-outline-secondary btn-sm" 
+                    title="Gerar PDF">
+                        <i class="ti ti-printer fs-5 me-1"></i>
+                        <span class="d-none d-md-inline">PDF</span>
                     </a>
                 </div>
             </td>
+
         </tr>
         {% empty %}
         <tr>

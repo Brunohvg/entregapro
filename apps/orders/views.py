@@ -1,5 +1,4 @@
 # your_project/core/views.py
-from ast import Or
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -10,8 +9,8 @@ from apps.orders.forms import OrderForm
 from apps.orders.models import Order
 
 from apps.customers.forms import CustomerForm, AddressForm
-from apps.orders.utils.orders import (get_customer_by_document, handle_existing_customer, handle_new_customer,)
-
+from apps.orders.utils.orders import handle_existing_customer, handle_new_customer
+from apps.customers.utils.customers import get_customer_by_document
 from .models import Order, Customer
 
 from django.template.loader import render_to_string
@@ -65,10 +64,7 @@ class OrderCreated(View):
         }
         return render(request, 'orders/order_created.html', context)
 
-
-# your_project/orders/views.py
-
-
+@method_decorator(login_required, name='dispatch')
 class OrderDetailView(DetailView):
     """
     View para exibir os detalhes de um único pedido.
@@ -100,12 +96,6 @@ class OrderDetailView(DetailView):
         return context
 
 
-
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from weasyprint import HTML
-from .models import Order
-
 def gerar_etiqueta_pdf(request, pk):
     order = Order.objects.get(pk=pk)
     address = order.customer.addresses.first()  # acessa o primeiro endereço do cliente
@@ -118,3 +108,5 @@ def gerar_etiqueta_pdf(request, pk):
     pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
 
     return HttpResponse(pdf, content_type="application/pdf")
+
+
