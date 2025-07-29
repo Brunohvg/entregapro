@@ -1,0 +1,54 @@
+<!-- Botão que abre o modal -->
+<button type="button" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
+  <i class="ti ti-refresh fs-5"></i> Atualizar Status
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form method="POST" action="#">
+        {{form}}
+      {% csrf_token %}
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title" id="updateStatusModalLabel">
+            <i class="ti ti-clipboard-check me-2"></i> Atualizar Status
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+
+        <div class="modal-body px-4 py-3">
+          <div class="mb-3">
+            <label for="status" class="form-label fw-semibold">Status do Pedido</label>
+            <select class="form-select rounded-3" name="status" id="status" required>
+              <option value="" disabled selected>Escolha uma opção</option>
+              <option value="pendente">🕒 Pendente</option>
+              <option value="em_processo">🔄 Em Processo</option>
+              <option value="finalizado">✅ Finalizado</option>
+              <option value="cancelado">❌ Cancelado</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="payment_status" class="form-label fw-semibold">Status do Pagamento</label>
+            <select class="form-select rounded-3" name="payment_status" id="payment_status">
+              <option value="" disabled selected>Escolha uma opção</option>
+              <option value="nao_pago">💸 Não Pago</option>
+              <option value="pago">💰 Pago</option>
+              <option value="reembolsado">🔙 Reembolsado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0 d-flex justify-content-between px-4 py-3">
+          <button type="submit" class="btn btn-success rounded-pill px-4">
+            <i class="ti ti-check me-1"></i> Salvar
+          </button>
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,7 +1,9 @@
 # your_project/core/views.py
+from ast import Or
+from email import message
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
@@ -17,8 +19,9 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.http import HttpResponse
 
-
-@method_decorator(login_required, name='dispatch')
+from django.contrib import messages
+from django.urls import reverse
+#@method_decorator(login_required, name='dispatch')
 class OrderListView(ListView):
     model = Order
     context_object_name = 'orders'
@@ -31,7 +34,7 @@ class OrderListView(ListView):
             orders = orders.filter(order_number__icontains=search)
         return orders
 
-@method_decorator(login_required, name='dispatch')
+#@method_decorator(login_required, name='dispatch')
 class OrderCreated(View):
     def get(self, request):
         context = {
@@ -64,7 +67,7 @@ class OrderCreated(View):
         }
         return render(request, 'orders/order_created.html', context)
 
-@method_decorator(login_required, name='dispatch')
+#@method_decorator(login_required, name='dispatch')
 class OrderDetailView(DetailView):
     """
     View para exibir os detalhes de um único pedido.
@@ -96,6 +99,22 @@ class OrderDetailView(DetailView):
         return context
 
 
+
+
+class OrderUpdateView(UpdateView):
+    model = Order
+    form_class = OrderForm
+    context_object_name = 'order'
+    template_name = 'orders/order_created.html'  # ou outro template
+
+    def get_success_url(self):
+        return reverse('orders:order_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Pedido atualizado com sucesso!')
+        return super().form_valid(form)
+
+
 def gerar_etiqueta_pdf(request, pk):
     order = Order.objects.get(pk=pk)
     address = order.customer.addresses.first()  # acessa o primeiro endereço do cliente
@@ -110,3 +129,9 @@ def gerar_etiqueta_pdf(request, pk):
     return HttpResponse(pdf, content_type="application/pdf")
 
 
+
+
+class TesteMensagemView(View):
+    def get(self, request):
+        messages.success(request, "Mensagem de sucesso aparece!")
+        return redirect('orders:order_list')  # Ajuste para uma URL que você tenha que usa o temp_
