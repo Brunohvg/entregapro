@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Minha Página Personalizada{% endblock %}
+{% block title %}Lista de Pedidos{% endblock %}
 
 {% block content %}
 <div class="card">
   <div class="card-body">
-
     {% include 'orders/partials/order_table.html' %}
     {% include 'orders/includes/order_md_update.html' %}
-
   </div>
 </div>
 {% endblock %}

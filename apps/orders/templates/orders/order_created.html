@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Minha Página Personalizada{% endblock %}
+{% block title %}Detalhes do Pedido #{{ order.order_number }}{% endblock %}
 
 {% block content %}
 <div class="card">
   <div class="card-body">
-
     {% include 'orders/partials/order_create.html' %}
-
 
   </div>
 </div>

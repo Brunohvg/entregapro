@@ -1,27 +1,32 @@
-# your_project/core/views.py
-from ast import Or
-from email import message
+# Standard Library
+
+
+# Django Core
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from django.contrib import messages
+from django.urls import reverse_lazy
 
+# Third-Party
+from weasyprint import HTML
+
+# Local Apps
 from apps.orders.forms import OrderForm
 from apps.orders.models import Order
-
-from apps.customers.forms import CustomerForm, AddressForm
 from apps.orders.utils.orders import handle_existing_customer, handle_new_customer
+from apps.customers.forms import CustomerForm, AddressForm
 from apps.customers.utils.customers import get_customer_by_document
-from .models import Order, Customer
+from apps.customers.models import Customer
+from apps.orders.utils.generate_pdf import generate_pdf
 
-from django.template.loader import render_to_string
-from weasyprint import HTML
-from django.http import HttpResponse
 
-from django.contrib import messages
-from django.urls import reverse
-#@method_decorator(login_required, name='dispatch')
+
+@method_decorator(login_required, name='dispatch')
 class OrderListView(ListView):
     model = Order
     context_object_name = 'orders'
@@ -34,7 +39,7 @@ class OrderListView(ListView):
             orders = orders.filter(order_number__icontains=search)
         return orders
 
-#@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class OrderCreated(View):
     def get(self, request):
         context = {
@@ -67,7 +72,7 @@ class OrderCreated(View):
         }
         return render(request, 'orders/order_created.html', context)
 
-#@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class OrderDetailView(DetailView):
     """
     View para exibir os detalhes de um único pedido.
@@ -98,9 +103,7 @@ class OrderDetailView(DetailView):
         
         return context
 
-
-
-
+@method_decorator(login_required, name='dispatch')
 class OrderUpdateView(UpdateView):
     model = Order
     form_class = OrderForm
@@ -108,30 +111,12 @@ class OrderUpdateView(UpdateView):
     template_name = 'orders/order_created.html'  # ou outro template
 
     def get_success_url(self):
-        return reverse('orders:order_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('orders:order_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         messages.success(self.request, 'Pedido atualizado com sucesso!')
         return super().form_valid(form)
 
 
-def gerar_etiqueta_pdf(request, pk):
-    order = Order.objects.get(pk=pk)
-    address = order.customer.addresses.first()  # acessa o primeiro endereço do cliente
-
-    html_string = render_to_string("orders/includes/order_label.html", {
-        "order": order,
-        "primary_address": address
-    })
-
-    pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
-
-    return HttpResponse(pdf, content_type="application/pdf")
-
-
-
-
-class TesteMensagemView(View):
-    def get(self, request):
-        messages.success(request, "Mensagem de sucesso aparece!")
-        return redirect('orders:order_list')  # Ajuste para uma URL que você tenha que usa o temp_
+def generate_label_pdf(request, pk):
+    return generate_pdf(request, pk)

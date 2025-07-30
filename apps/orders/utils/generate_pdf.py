@@ -3,11 +3,11 @@ from weasyprint import HTML
 from django.http import HttpResponse
 from apps.orders.models import Order
 
-def gerar_etiqueta_pdf(request, order_id):
-    order = Order.objects.get(pk=order_id)
-    address = order.customer.address_set.first()
-    
-    html_string = render_to_string("orders/order_label.html", {
+def generate_pdf(request, pk):
+    order = Order.objects.get(pk=pk)
+    address = order.customer.addresses.first()  # acessa o primeiro endereço do cliente
+
+    html_string = render_to_string("orders/includes/order_label.html", {
         "order": order,
         "primary_address": address
     })
