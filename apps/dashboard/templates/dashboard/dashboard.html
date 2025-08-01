@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Bibelo Express{% endblock %}
+
+{% block head_extra %}
+  <!-- ApexCharts para os gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  
+  <!-- Estilos customizados para um visual mais moderno -->
+  <style>
+    body {
+        background-color: #f7f8fc;
+    }
+    .card {
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: none;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 16px rgba(0,0,0,0.1);
+    }
+    .icon-gradient {
+        background: linear-gradient(135deg, #5D87FF, #49BEFF);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    .top-customer-avatar {
+        width: 45px;
+        height: 45px;
+        background-color: #eef2f6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #5D87FF;
+        font-size: 1.1rem;
+    }
+    .recent-order-icon {
+        width: 40px;
+        height: 40px;
+        background-color: #eef2f6;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #5D87FF;
+        font-size: 1.2rem;
+    }
+  </style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+  <!-- Seção de Cards de Resumo -->
+  <div class="row">
+    <div class="col-sm-6 col-xl-3">
+      <div class="card overflow-hidden rounded-2">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center">
+                <div class="icon-gradient me-3">
+                    <i class="ti ti-currency-dollar"></i>
+                </div>
+                <div>
+                    <h6 class="mb-1 text-muted">Faturamento do Mês</h6>
+                    <h4 class="fw-semibold mb-0">R$ {{ total_revenue_month|floatformat:2 }}</h4>
+                    <small class="text-muted">Ticket Médio: R$ {{ average_ticket_month|floatformat:2 }}</small>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card overflow-hidden rounded-2">
+          <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                  <div class="icon-gradient me-3">
+                      <i class="ti ti-package"></i>
+                  </div>
+                  <div>
+                      <h6 class="mb-1 text-muted">Total de Pedidos</h6>
+                      <h4 class="fw-semibold mb-0">{{ total_orders }}</h4>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card overflow-hidden rounded-2">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="icon-gradient me-3">
+                        <i class="ti ti-users"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 text-muted">Total de Clientes</h6>
+                        <h4 class="fw-semibold mb-0">{{ total_customers }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card overflow-hidden rounded-2">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="icon-gradient me-3" style="background: linear-gradient(135deg, #FA896B, #FFAE1F);">
+                        <i class="ti ti-clock-hour-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 text-muted">Aguardando Coleta</h6>
+                        <h4 class="fw-semibold mb-0">{{ pending_delivery_count }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Gráfico de Ganhos e Pedidos Recentes -->
+  <div class="row">
+    <div class="col-lg-8 d-flex align-items-strech">
+        <div class="card w-100">
+            <div class="card-body">
+              <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                <div class="mb-3 mb-sm-0">
+                  <h5 class="card-title fw-semibold">Ganhos Mensais (Últimos 6 meses)</h5>
+                </div>
+              </div>
+              <div id="monthly-earnings-chart"></div>
+            </div>
+          </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Pedidos Recentes</h5>
+                <ul class="list-unstyled">
+                    {% for order in recent_orders %}
+                    <li class="d-flex align-items-center mb-4">
+                        <div class="recent-order-icon me-3">
+                            <i class="ti ti-shopping-cart"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-semibold mb-0">{{ order.customer.nickname|default:order.customer.full_name }}</h6>
+                            <small class="text-muted">#{{ order.order_number }}</small>
+                        </div>
+                        <div class="text-end">
+                            <h6 class="fw-semibold text-dark mb-0">R$ {{ order.total_amount|floatformat:2 }}</h6>
+                            <span class="badge bg-light-secondary text-secondary rounded-3 fw-semibold">{{ order.get_delivery_status_display }}</span>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="text-center text-muted">Nenhum pedido recente.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <!-- NOVA SEÇÃO: Desempenho Geográfico e Melhores Clientes -->
+  <div class="row">
+    <div class="col-lg-7 d-flex align-items-stretch">
+        <div class="card w-100">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Desempenho Geográfico</h5>
+                <p class="card-subtitle mb-4">Top 5 cidades por faturamento</p>
+                <div id="city-performance-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 d-flex align-items-stretch">
+        <div class="card w-100">
+          <div class="card-body p-4">
+            <div class="mb-4">
+              <h5 class="card-title fw-semibold">Melhores Clientes</h5>
+            </div>
+            <ul class="list-unstyled">
+              {% for customer in top_customers %}
+              <li class="d-flex align-items-center mb-4">
+                <div class="top-customer-avatar me-3">
+                  <span>{{ customer.full_name|first|upper }}</span>
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="fw-semibold mb-0">{{ customer.nickname|default:customer.full_name }}</h6>
+                  <span class="fw-normal text-muted">Total Gasto</span>
+                </div>
+                <h5 class="fw-semibold mb-0 text-success">+ R$ {{ customer.spent_total|floatformat:2 }}</h5>
+              </li>
+              {% empty %}
+              <li class="list-group-item">Nenhum cliente para exibir.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Gráficos de Visão Geral -->
+  <div class="row">
+    <div class="col-lg-12 d-flex align-items-stretch">
+      <div class="card w-100">
+        <div class="card-body">
+            <h5 class="card-title fw-semibold mb-4">Visão Geral dos Pedidos</h5>
+            <div class="row align-items-center">
+                <div class="col-md-6 border-end-md">
+                    <div id="order-type-chart"></div>
+                </div>
+                <div class="col-md-6 mt-3 mt-md-0">
+                    <div id="delivery-status-chart"></div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // --- Gráfico de Ganhos Mensais (Área) ---
+  var monthlyEarningsOptions = {
+    series: [{ name: 'Faturamento', data: {{ sales_data|safe }} }],
+    chart: { type: 'area', height: 320, toolbar: { show: false }, foreColor: '#adb0bb', fontFamily: 'inherit' },
+    dataLabels: { enabled: false },
+    stroke: { curve: 'smooth', width: 2 },
+    grid: { borderColor: 'rgba(0,0,0,0.1)', strokeDashArray: 3, xaxis: { lines: { show: false } } },
+    xaxis: { categories: {{ months_labels|safe }}, axisBorder: { show: false }, axisTicks: { show: false } },
+    yaxis: { labels: { formatter: (v) => "R$ " + v.toFixed(2) } },
+    tooltip: { theme: "dark" },
+    colors: ["#5D87FF"],
+    fill: { type: "gradient", gradient: { shadeIntensity: 0, inverseColors: false, opacityFrom: 0.2, opacityTo: 0, stops: [20, 100, 100, 100] } },
+  };
+  new ApexCharts(document.querySelector("#monthly-earnings-chart"), monthlyEarningsOptions).render();
+
+  // --- NOVO: Gráfico de Desempenho por Cidade (Barras Horizontais) ---
+  var cityPerformanceOptions = {
+    series: [{ name: 'Faturamento', data: {{ city_series|safe }} }],
+    chart: { type: 'bar', height: 350, toolbar: { show: false }, foreColor: '#adb0bb', fontFamily: 'inherit' },
+    plotOptions: { bar: { borderRadius: 4, horizontal: true, barHeight: '60%', distributed: true } },
+    dataLabels: { enabled: false },
+    xaxis: { categories: {{ city_labels|safe }}, labels: { formatter: (v) => "R$ " + v.toFixed(0) } },
+    yaxis: { labels: { show: true, style: { colors: [], fontSize: '12px', fontWeight: 600 } } },
+    tooltip: { theme: 'dark', y: { formatter: (v) => "R$ " + v.toFixed(2) } },
+    colors: ["#5D87FF", "#49BEFF", "#13DEB9", "#FFAE1F", "#FA896B"],
+    grid: { borderColor: 'rgba(0,0,0,0.1)' },
+    legend: { show: false }
+  };
+  new ApexCharts(document.querySelector("#city-performance-chart"), cityPerformanceOptions).render();
+
+  // --- Gráfico de Tipos de Pedido (Rosca) ---
+  var orderTypeOptions = {
+    series: {{ order_type_series|safe }},
+    labels: {{ order_type_labels|safe }},
+    chart: { type: 'donut', height: 250, foreColor: '#adb0bb', fontFamily: 'inherit' },
+    plotOptions: { pie: { donut: { size: '70%' } } },
+    dataLabels: { enabled: false },
+    legend: { show: true, position: 'bottom', markers: {width: 12, height: 12, radius: 12}, itemMargin: { horizontal: 10, vertical: 5 } },
+    stroke: { show: false },
+    responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }],
+    colors: ["#5D87FF", "#49BEFF"],
+    tooltip: { fillSeriesColor: false, y: { formatter: (v) => v + " pedido(s)" } },
+    title: { text: 'Canais de Pedido', align: 'center', style: { fontSize:  '16px', fontWeight:  'bold', color:  '#2A3547' } }
+  };
+  new ApexCharts(document.querySelector("#order-type-chart"), orderTypeOptions).render();
+
+  // --- Gráfico de Status de Entrega (Rosca) ---
+  var deliveryStatusOptions = {
+    series: {{ delivery_status_series|safe }},
+    labels: {{ delivery_status_labels|safe }},
+    chart: { type: 'donut', height: 250, foreColor: '#adb0bb', fontFamily: 'inherit' },
+    plotOptions: { pie: { donut: { size: '70%' } } },
+    dataLabels: { enabled: false },
+    legend: { show: true, position: 'bottom', markers: {width: 12, height: 12, radius: 12}, itemMargin: { horizontal: 10, vertical: 5 } },
+    stroke: { show: false },
+    responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }],
+    colors: ["#FA896B", "#FFAE1F", "#539BFF", "#13DEB9", "#E74C3C", "#8E44AD", "#34495E"],
+    tooltip: { fillSeriesColor: false, y: { formatter: (v) => v + " pedido(s)" } },
+    title: { text: 'Status das Entregas', align: 'center', style: { fontSize:  '16px', fontWeight:  'bold', color:  '#2A3547' } }
+  };
+  new ApexCharts(document.querySelector("#delivery-status-chart"), deliveryStatusOptions).render();
+});
+</script>
+{% endblock %}

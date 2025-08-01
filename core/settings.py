@@ -30,7 +30,9 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.accounts',
     'widget_tweaks',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    'apps.dashboard', 
+
 ]
 
 MIDDLEWARE = [
