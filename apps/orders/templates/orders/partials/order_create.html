@@ -1,25 +1,26 @@
 {% load widget_tweaks %}
+{% load static %}
 
 <!-- Header com título e breadcrumb -->
 <div class="card bg-light-info shadow-none position-relative overflow-hidden">
   <div class="card-body px-4 py-3">
     <div class="row align-items-center">
       <div class="col-9">
-        <h4 class="fw-semibold mb-8">Criar pedido</h4>
+        <h4 class="fw-semibold mb-8">Todos os pedidos</h4>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
               <a class="text-muted text-decoration-none" href="#">Início</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              Criar pedido
+              Lista de Pedidos
             </li>
           </ol>
         </nav>
       </div>
       <div class="col-3 text-center">
-        <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/breadcrumb/ChatBc.png"
-             alt="Pedidos" class="img-fluid mb-n4">
+        <img src="{% static 'images/backgrounds/ChatBc.png' %}" alt="Pedidos" class="img-fluid mb-n4">
+             
       </div>
     </div>
   </div>
@@ -174,7 +175,7 @@
   <div class="mb-4 p-4 border rounded shadow-sm bg-white">
     <h5 class="mb-3"><i class="bi bi-box-seam me-2"></i>Detalhes do Pedido</h5>
     <div class="row">
-      <div class="col-md-4 mb-3">
+      <div class="col-md-2 mb-3">
         <label for="order_number" class="form-label">Nº do Pedido</label>
         {% render_field form.order_number class="form-control" %}
         {% if form.order_number.errors %}
@@ -185,12 +186,23 @@
           </div>
         {% endif %}
       </div>
-      <div class="col-md-4 mb-3">
+      <div class="col-md-3 mb-3">
         <label for="payment_status" class="form-label">Status do Pagamento</label>
         {% render_field form.payment_status class="form-control" %}
         {% if form.payment_status.errors %}
           <div class="text-danger small mt-1">
             {% for error in form.payment_status.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-3 mb-3">
+        <label for="type_order" class="form-label">Tipo de venda</label>
+        {% render_field form.type_order class="form-control" %}
+        {% if form.type_order.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.type_order.errors %}
               {{ error }}
             {% endfor %}
           </div>

@@ -4,7 +4,7 @@
 # Django Core
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
@@ -76,31 +76,30 @@ class OrderCreated(View):
 class OrderDetailView(DetailView):
     """
     View para exibir os detalhes de um único pedido.
-    Utiliza DetailView do Django para buscar um objeto Order
-    e passá-lo para o template.
     """
     model = Order
-    template_name = 'orders/order_detail.html' # O template principal para esta view
-    context_object_name = 'order' # O nome da variável de contexto que será usada no template
+    template_name = 'orders/order_detail.html'
+    context_object_name = 'order'
+
+    def get_queryset(self):
+        """
+        Otimiza as queries para carregar customer e seus endereços de uma vez.
+        """
+        return Order.objects.select_related('customer').prefetch_related('customer__addresses')
 
     def get_context_data(self, **kwargs):
         """
-        Adiciona dados adicionais ao contexto do template.
-        Neste caso, tentamos obter o endereço principal do cliente do pedido.
+        Adiciona o endereço principal do cliente ao contexto.
         """
         context = super().get_context_data(**kwargs)
-        order = self.get_object() # Obtém o objeto Order atual
-        
-        # Tenta obter o endereço principal do cliente associado ao pedido
-        # Se o cliente tiver múltiplos endereços, você pode ajustar a lógica aqui
-        # para selecionar o endereço relevante para o pedido (se houver um link direto)
-        # ou apenas listar todos os endereços do cliente.
-        # Para este exemplo, vamos tentar pegar o endereço marcado como primário.
-        try:
-            context['primary_address'] = order.customer.addresses.filter(is_primary=True).first()
-        except Customer.addresses.RelatedObjectDoesNotExist:
+        order = self.object  # já está disponível no DetailView
+        customer = getattr(order, 'customer', None)
+
+        if customer:
+            context['primary_address'] = customer.addresses.filter(is_primary=True).first()
+        else:
             context['primary_address'] = None
-        
+
         return context
 
 @method_decorator(login_required, name='dispatch')
@@ -116,6 +115,11 @@ class OrderUpdateView(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Pedido atualizado com sucesso!')
         return super().form_valid(form)
+
+@method_decorator(login_required, name='dispatch')
+class OrderDeleteView(DeleteView):
+    model = Order
+    
 
 
 def generate_label_pdf(request, pk):

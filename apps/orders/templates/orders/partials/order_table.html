@@ -3,6 +3,7 @@ ARQUIVO: templates/orders/partials/_order_table.html
 OBJETIVO: Renderizar APENAS a tabela com a lista de pedidos.
 {% endcomment %}
 {% load order_helpers %}
+{% load static %}
 
 <!-- Header com título e breadcrumb -->
 <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -22,8 +23,8 @@ OBJETIVO: Renderizar APENAS a tabela com a lista de pedidos.
         </nav>
       </div>
       <div class="col-3 text-center">
-        <img src="https://bootstrapdemos.adminmart.com/modernize/dist/assets/images/breadcrumb/ChatBc.png"
-             alt="Pedidos" class="img-fluid mb-n4">
+        <img src="{% static 'images/backgrounds/ChatBc.png' %}" alt="Pedidos" class="img-fluid mb-n4">
+             
       </div>
     </div>
   </div>

@@ -5,6 +5,12 @@ from apps.customers.models import Customer
 from django.db.models import Sum
 from django.utils import timezone
 
+
+class TypeOrder(models.TextChoices):
+    MAIL = "MAIL", "Correios"
+    WHATSAPP = "WHATSAPP", "Whatsapp"
+
+
 class DeliveryStatus(models.TextChoices):
     PENDING = "PENDING", "Aguardando Coleta" 
     PICKED_UP = "PICKED_UP", "Coletado"
@@ -38,6 +44,7 @@ class Order(models.Model):  # TABELA PEDIDO
         default=DeliveryStatus.PENDING,
         verbose_name='Status Entrega' # Adicionado verbose_name aqui
     )
+    type_order = models.CharField(max_length=20, choices=TypeOrder.choices, default=TypeOrder.WHATSAPP, verbose_name='Tipo de Pedido')
     total_amount = models.FloatField(verbose_name='Valor Total') # Adicionado verbose_name
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado Em') # Adicionado verbose_name
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado Em') # Adicionado verbose_name
