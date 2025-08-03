@@ -102,7 +102,6 @@ class OrderDetailView(DetailView):
 
         return context
 
-from django.http import HttpResponse
 
 @method_decorator(login_required, name='dispatch')
 class OrderUpdateView(UpdateView):
@@ -112,23 +111,17 @@ class OrderUpdateView(UpdateView):
     template_name = 'orders/hx/order_update_form_hx.html'  # ou outro template
 
     def get_success_url(self):
-        return reverse_lazy('orders:order_list' )
+        return reverse_lazy('orders:order_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
-        # Salva o formulário
-        self.object = form.save()
         messages.success(self.request, 'Pedido atualizado com sucesso!')
+        return super().form_valid(form)
 
-        # Retorna uma resposta vazia ou um fragmento simples,
-        # e usa os cabeçalhos HTMX para instruir o navegador a redirecionar
-        response = HttpResponse(status=204)  # 204 No Content é uma boa prática aqui
-        response['HX-Redirect'] = self.get_success_url()
-        return response
-    
 @method_decorator(login_required, name='dispatch')
 class OrderDeleteView(DeleteView):
     model = Order
     
+
 
 def generate_label_pdf(request, pk):
     return generate_pdf(request, pk)

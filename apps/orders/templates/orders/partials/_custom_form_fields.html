@@ -1,0 +1,74 @@
+<!-- Seção: Pedido -->
+  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
+    <h5 class="mb-3"><i class="bi bi-box-seam me-2"></i>Detalhes do Pedido</h5>
+    <div class="row">
+      <div class="col-md-2 mb-3">
+        <label for="order_number" class="form-label">Nº do Pedido</label>
+        {% render_field form.order_number class="form-control" %}
+        {% if form.order_number.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.order_number.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-3 mb-3">
+        <label for="payment_status" class="form-label">Status do Pagamento</label>
+        {% render_field form.payment_status class="form-control" %}
+        {% if form.payment_status.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.payment_status.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-3 mb-3">
+        <label for="type_order" class="form-label">Tipo de venda</label>
+        {% render_field form.type_order class="form-control" %}
+        {% if form.type_order.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.type_order.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="delivery_status" class="form-label">Status da Entrega</label>
+        {% render_field form.delivery_status class="form-control" %}
+        {% if form.delivery_status.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.delivery_status.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="total_amount" class="form-label">Valor Total</label>
+        {% render_field form.total_amount class="form-control" placeholder="R$ 0,00" %}
+        {% if form.total_amount.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.total_amount.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="observations" class="form-label">Observações</label>
+        {% render_field form.observations class="form-control" placeholder="Instruções, observações..." %}
+        {% if form.observations.errors %}
+          <div class="text-danger small mt-1">
+            {% for error in form.observations.errors %}
+              {{ error }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>

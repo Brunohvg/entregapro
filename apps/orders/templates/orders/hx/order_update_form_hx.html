@@ -1,0 +1,121 @@
+<form method="post" hx-post="{% url 'orders:order_update' object.pk %}"
+      hx-target="#updateContent" hx-swap="innerHTML"
+      class="needs-validation" novalidate> {# Adiciona validação do Bootstrap #}
+  {% csrf_token %}
+  {% load widget_tweaks %}
+
+  <div class="modal-header bg-gradient-primary text-white"> {# Gradiente no cabeçalho #}
+    <h5 class="modal-title" id="orderEditModalLabel">
+      <i class="bi bi-pencil-square me-2"></i> Editar Pedido
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+  </div>
+
+  <div class="modal-body">
+    {# Área para mensagens de sucesso/erro (do Django messages framework) #}
+    <div id="form-messages" class="mb-3">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="card mb-4 shadow-sm border-0"> {# Remove a borda padrão do card #}
+      <div class="card-header bg-light border-bottom-0 rounded-top"> {# Remove borda inferior, arredonda topo #}
+        <h6 class="mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>Informações Essenciais</h6>
+      </div>
+      <div class="card-body">
+        <div class="row g-3"> {# Espaçamento maior entre colunas #}
+          <div class="col-md-3"> {# Colunas sem mb-3 para usar g-3 #}
+            <label for="{{ form.order_number.id_for_label }}" class="form-label fw-bold">Nº do Pedido</label>
+            {% render_field form.order_number class="form-control" %}
+            {% if form.order_number.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.order_number.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          <div class="col-md-4">
+            <label for="{{ form.payment_status.id_for_label }}" class="form-label fw-bold">Status do Pagamento</label>
+            {% render_field form.payment_status class="form-select" %}
+            {% if form.payment_status.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.payment_status.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          <div class="col-md-5">
+            <label for="{{ form.delivery_status.id_for_label }}" class="form-label fw-bold">Status da Entrega</label>
+            {% render_field form.delivery_status class="form-select" %}
+            {% if form.delivery_status.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.delivery_status.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row g-3 mt-3"> {# Adiciona margem superior para espaçar as linhas #}
+          <div class="col-md-4">
+            <label for="{{ form.type_order.id_for_label }}" class="form-label fw-bold">Tipo de Venda</label>
+            {% render_field form.type_order class="form-select" %}
+            {% if form.type_order.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.type_order.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          <div class="col-md-4">
+            <label for="{{ form.total_amount.id_for_label }}" class="form-label fw-bold">Valor Total</label>
+            {% render_field form.total_amount class="form-control" placeholder="R$ 0,00" %}
+            {% if form.total_amount.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.total_amount.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm border-0">
+      <div class="card-header bg-light border-bottom-0 rounded-top">
+        <h6 class="mb-0 text-primary"><i class="bi bi-chat-dots me-2"></i>Observações</h6>
+      </div>
+      <div class="card-body">
+        <div class="mb-0"> {# mb-0 para remover margem inferior se for o último item #}
+          <label for="{{ form.observations.id_for_label }}" class="form-label visually-hidden">Observações</label>
+          {% render_field form.observations class="form-control" rows="4" placeholder="Insira quaisquer instruções ou observações adicionais aqui..." %} {# Aumenta para 4 linhas #}
+          {% if form.observations.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.observations.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div> {# Fim do modal-body #}
+
+  <div class="modal-footer bg-light border-top"> {# Fundo claro e borda superior #}
+    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> {# Botão de contorno #}
+      <i class="bi bi-x-circle me-2"></i>Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-check-circle me-2"></i>Salvar Alterações
+    </button>
+  </div>
+</form>

@@ -78,7 +78,13 @@ OBJETIVO: Renderizar APENAS a tabela com a lista de pedidos.
             <i class="ti ti-eye fs-5 me-1"></i>
           </a>
           <!-- Editar -->
-          <a href="#" class="btn btn-outline-warning btn-sm" title="Atualizar Pedido">
+          <a href="#" class="btn btn-outline-warning btn-sm" 
+              data-bs-toggle="modal"
+              data-bs-target="#updateModal"
+              hx-get="{% url 'orders:order_update' order.pk %}"
+              hx-target="#updateContent"
+              hx-swap="innerHTML"
+              title="Editar Pedido">
             <i class="ti ti-pencil fs-5 me-1"></i>
           </a>
           <!-- PDF -->
