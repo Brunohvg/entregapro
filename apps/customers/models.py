@@ -22,6 +22,7 @@ class Address(models.Model): # TABELA ENDEREÇO
     neighborhood = models.CharField(max_length=100, verbose_name='Bairro')
     city = models.CharField(max_length=100, verbose_name='Cidade')
     postal_code = models.CharField(max_length=20, verbose_name='Cep')
+    state = models.CharField(max_length=20, verbose_name='Estado')
     reference = models.CharField(max_length=255, blank=True, null=True, verbose_name='Referencia')
     is_primary = models.BooleanField(default=True, verbose_name='Endereço principal')
 

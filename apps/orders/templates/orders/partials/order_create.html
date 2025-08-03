@@ -1,260 +1,305 @@
 {% load widget_tweaks %}
 {% load static %}
 
-<!-- Header com título e breadcrumb -->
-<div class="card bg-light-info shadow-none position-relative overflow-hidden">
+<div class="card bg-light-info shadow-none position-relative overflow-hidden mb-4">
   <div class="card-body px-4 py-3">
     <div class="row align-items-center">
       <div class="col-9">
-        <h4 class="fw-semibold mb-8">Todos os pedidos</h4>
+        <h4 class="fw-semibold mb-8">Novo Pedido</h4>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
               <a class="text-muted text-decoration-none" href="#">Início</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-              Lista de Pedidos
+              Criar Pedido
             </li>
           </ol>
         </nav>
       </div>
       <div class="col-3 text-center">
         <img src="{% static 'images/backgrounds/ChatBc.png' %}" alt="Pedidos" class="img-fluid mb-n4">
-             
       </div>
     </div>
   </div>
 </div>
 
-
-<form method="post" novalidate>
+<form method="post" novalidate class="needs-validation"> {# Adiciona validação do Bootstrap #}
   {% csrf_token %}
 
-  <!-- Seção: Cliente -->
-  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
-    <h5 class="mb-3"><i class="bi bi-person-circle me-2"></i>Dados do Cliente</h5>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="full_name" class="form-label">Nome Completo</label>
-        {% render_field form_customer.full_name class="form-control" placeholder="Nome completo" %}
-        {% if form_customer.full_name.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_customer.full_name.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
+  {# Área para mensagens de sucesso/erro (do Django messages framework) #}
+  <div id="form-messages" class="mb-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
-      <div class="col-md-6 mb-3">
-        <label for="phone" class="form-label">Telefone</label>
-        {% render_field form_customer.phone class="form-control" placeholder="(99) 99999-9999" %}
-        {% if form_customer.phone.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_customer.phone.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card mb-4 shadow-sm border-0">
+    <div class="card-header bg-light border-bottom-0 rounded-top">
+      <h6 class="mb-0 text-primary"><i class="bi bi-person-circle me-2"></i> Dados do Cliente</h6>
     </div>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="email" class="form-label">E-mail</label>
-        {% render_field form_customer.email class="form-control" placeholder="cliente@email.com" %}
-        {% if form_customer.email.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_customer.email.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="document" class="form-label">CPF ou CNPJ</label>
-        {% render_field form_customer.document class="form-control" placeholder="000.000.000-00" %}
-        {% if form_customer.document.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_customer.document.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
+    <div class="card-body">
+      <div class="row g-3"> {# Usando g-3 para espaçamento #}
+        <div class="col-md-6">
+          <label for="{{ form_customer.full_name.id_for_label }}" class="form-label fw-bold">Nome Completo</label>
+          {% render_field form_customer.full_name class="form-control" placeholder="Nome completo do cliente" %}
+          {% if form_customer.full_name.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_customer.full_name.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_customer.phone.id_for_label }}" class="form-label fw-bold">Telefone</label>
+          {% render_field form_customer.phone class="form-control" placeholder="(99) 99999-9999" %}
+          {% if form_customer.phone.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_customer.phone.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_customer.email.id_for_label }}" class="form-label fw-bold">E-mail</label>
+          {% render_field form_customer.email class="form-control" placeholder="cliente@email.com" %}
+          {% if form_customer.email.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_customer.email.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_customer.document.id_for_label }}" class="form-label fw-bold">CPF ou CNPJ</label>
+          {% render_field form_customer.document class="form-control" placeholder="000.000.000-00 ou 00.000.000/0000-00" %}
+          {% if form_customer.document.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_customer.document.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Seção: Endereço -->
-  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
-    <h5 class="mb-3"><i class="bi bi-geo-alt-fill me-2"></i>Endereço de Entrega</h5>
-    <div class="row">
-      <div class="col-md-4 mb-3">
-        <label for="postal_code" class="form-label">CEP</label>
-        {% render_field form_address.postal_code class="form-control" placeholder="00000-000" id="id_cep" %}
-        {% if form_address.postal_code.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.postal_code.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-8 mb-3">
-        <label for="street" class="form-label">Rua</label>
-        {% render_field form_address.street class="form-control" id="id_rua" %}
-        {% if form_address.street.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.street.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
+  <div class="card mb-4 shadow-sm border-0">
+    <div class="card-header bg-light border-bottom-0 rounded-top">
+      <h6 class="mb-0 text-primary"><i class="bi bi-geo-alt-fill me-2"></i> Endereço de Entrega</h6>
     </div>
-    <div class="row">
-      <div class="col-md-4 mb-3">
-        <label for="number" class="form-label">Número</label>
-        {% render_field form_address.number class="form-control" %}
-        {% if form_address.number.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.number.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-4 mb-3">
-        <label for="neighborhood" class="form-label">Bairro</label>
-        {% render_field form_address.neighborhood class="form-control" id="id_bairro" %}
-        {% if form_address.neighborhood.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.neighborhood.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-4 mb-3">
-        <label for="city" class="form-label">Cidade</label>
-        {% render_field form_address.city class="form-control" id="id_cidade" %}
-        {% if form_address.city.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.city.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="complement" class="form-label">Complemento</label>
-        {% render_field form_address.complement class="form-control" %}
-        {% if form_address.complement.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.complement.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="reference" class="form-label">Referência</label>
-        {% render_field form_address.reference class="form-control" %}
-        {% if form_address.reference.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form_address.reference.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <!-- Seção: Pedido -->
-  <div class="mb-4 p-4 border rounded shadow-sm bg-white">
-    <h5 class="mb-3"><i class="bi bi-box-seam me-2"></i>Detalhes do Pedido</h5>
-    <div class="row">
-      <div class="col-md-2 mb-3">
-        <label for="order_number" class="form-label">Nº do Pedido</label>
-        {% render_field form.order_number class="form-control" %}
-        {% if form.order_number.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form.order_number.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-3 mb-3">
-        <label for="payment_status" class="form-label">Status do Pagamento</label>
-        {% render_field form.payment_status class="form-control" %}
-        {% if form.payment_status.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form.payment_status.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-3 mb-3">
-        <label for="type_order" class="form-label">Tipo de venda</label>
-        {% render_field form.type_order class="form-control" %}
-        {% if form.type_order.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form.type_order.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-4 mb-3">
-        <label for="delivery_status" class="form-label">Status da Entrega</label>
-        {% render_field form.delivery_status class="form-control" %}
-        {% if form.delivery_status.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form.delivery_status.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="total_amount" class="form-label">Valor Total</label>
-        {% render_field form.total_amount class="form-control" placeholder="R$ 0,00" %}
-        {% if form.total_amount.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form.total_amount.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="observations" class="form-label">Observações</label>
-        {% render_field form.observations class="form-control" placeholder="Instruções, observações..." %}
-        {% if form.observations.errors %}
-          <div class="text-danger small mt-1">
-            {% for error in form.observations.errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-        {% endif %}
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="{{ form_address.postal_code.id_for_label }}" class="form-label fw-bold">CEP</label>
+          {% render_field form_address.postal_code class="form-control" placeholder="00000-000" id="id_cep" %}
+          {% if form_address.postal_code.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.postal_code.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-7">
+          <label for="{{ form_address.street.id_for_label }}" class="form-label fw-bold">Rua</label>
+          {% render_field form_address.street class="form-control" id="id_rua" placeholder="Nome da rua ou avenida" %}
+          {% if form_address.street.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.street.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-2">
+          <label for="{{ form_address.number.id_for_label }}" class="form-label fw-bold">Número</label>
+          {% render_field form_address.number class="form-control" placeholder="Ex: 123" %}
+          {% if form_address.number.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.number.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form_address.neighborhood.id_for_label }}" class="form-label fw-bold">Bairro</label>
+          {% render_field form_address.neighborhood class="form-control" id="id_bairro" placeholder="Nome do bairro" %}
+          {% if form_address.neighborhood.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.neighborhood.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form_address.city.id_for_label }}" class="form-label fw-bold">Cidade</label>
+          {% render_field form_address.city class="form-control" id="id_cidade" placeholder="Nome da cidade" %}
+          {% if form_address.city.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.city.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form_address.state.id_for_label }}" class="form-label fw-bold">Estado</label> {# Adicionado campo de estado, se existir no seu form_address #}
+          {% render_field form_address.state class="form-control" id="id_estado" placeholder="Nome do estado" %}
+          {% if form_address.state.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.state.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_address.complement.id_for_label }}" class="form-label fw-bold">Complemento</label>
+          {% render_field form_address.complement class="form-control" placeholder="Apto, Bloco, Casa fundos, etc." %}
+          {% if form_address.complement.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.complement.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_address.reference.id_for_label }}" class="form-label fw-bold">Ponto de Referência</label>
+          {% render_field form_address.reference class="form-control" placeholder="Próximo a..." %}
+          {% if form_address.reference.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.reference.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Botão -->
-  <div class="text-end">
+  <div class="card mb-4 shadow-sm border-0">
+    <div class="card-header bg-light border-bottom-0 rounded-top">
+      <h6 class="mb-0 text-primary"><i class="bi bi-box-seam me-2"></i> Detalhes do Pedido</h6>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <label for="{{ form.order_number.id_for_label }}" class="form-label fw-bold">Nº do Pedido</label>
+          {% render_field form.order_number class="form-control" placeholder="Ex: 12345" %}
+          {% if form.order_number.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.order_number.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-3">
+          <label for="{{ form.type_order.id_for_label }}" class="form-label fw-bold">Tipo de Venda</label>
+          {% render_field form.type_order class="form-select" %}
+          {% if form.type_order.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.type_order.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-3">
+          <label for="{{ form.payment_status.id_for_label }}" class="form-label fw-bold">Status do Pagamento</label>
+          {% render_field form.payment_status class="form-select" %}
+          {% if form.payment_status.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.payment_status.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form.delivery_status.id_for_label }}" class="form-label fw-bold">Status da Entrega</label>
+          {% render_field form.delivery_status class="form-select" %}
+          {% if form.delivery_status.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.delivery_status.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form.total_amount.id_for_label }}" class="form-label fw-bold">Valor Total do Pedido</label>
+          <div class="input-group">
+            <span class="input-group-text">R$</span>
+            {% render_field form.total_amount class="form-control" placeholder="0,00" aria-label="Valor Total do Pedido" %}
+          </div>
+          {% if form.total_amount.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.total_amount.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form.delivery_fee.id_for_label }}" class="form-label fw-bold">Valor da Entrega</label>
+          <div class="input-group">
+            <span class="input-group-text">R$</span>
+            {% render_field form.delivery_fee class="form-control" placeholder="0,00" aria-label="Valor da Entrega" %}
+          </div>
+          {% if form.delivery_fee.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.delivery_fee.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form.courier.id_for_label }}" class="form-label fw-bold">Entregador</label>
+          {% render_field form.courier class="form-select" %}
+          {% if form.courier.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.courier.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-12"> {# Alterado de mb-3 para manter g-3 consistente #}
+          <label for="{{ form.observations.id_for_label }}" class="form-label fw-bold">Observações</label>
+          {% render_field form.observations class="form-control" rows="4" placeholder="Insira quaisquer instruções ou observações adicionais aqui, como detalhes de entrega ou preferências do cliente." %}
+          {% if form.observations.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.observations.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-end mb-4"> {# Adiciona margem inferior ao botão #}
     <button type="submit" class="btn btn-success btn-lg">
-      <i class="bi bi-save me-2"></i>Salvar Pedido
+      <i class="bi bi-save me-2"></i> Salvar Pedido
     </button>
   </div>
 </form>
 
-<!-- CEP Auto preenchimento -->
 <script>
 document.getElementById("id_cep").addEventListener("blur", function() {
   const cep = this.value.replace(/\D/g, "");
@@ -266,12 +311,16 @@ document.getElementById("id_cep").addEventListener("blur", function() {
           document.getElementById("id_rua").value = data.logradouro;
           document.getElementById("id_bairro").value = data.bairro;
           document.getElementById("id_cidade").value = data.localidade;
+          // Adiciona o preenchimento do estado, se o campo existir e o ViaCEP retornar
+          if (document.getElementById("id_estado") && data.uf) {
+            document.getElementById("id_estado").value = data.uf;
+          }
         } else {
           alert("CEP não encontrado.");
         }
       })
       .catch(() => {
-        alert("Erro ao buscar CEP.");
+        alert("Erro ao buscar CEP. Verifique sua conexão ou tente novamente.");
       });
   }
 });

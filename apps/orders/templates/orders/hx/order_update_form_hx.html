@@ -1,10 +1,10 @@
 <form method="post" hx-post="{% url 'orders:order_update' object.pk %}"
       hx-target="#updateContent" hx-swap="innerHTML"
-      class="needs-validation" novalidate> {# Adiciona validação do Bootstrap #}
+      class="needs-validation" novalidate>
   {% csrf_token %}
   {% load widget_tweaks %}
 
-  <div class="modal-header bg-gradient-primary text-white"> {# Gradiente no cabeçalho #}
+  <div class="modal-header bg-gradient-primary text-white">
     <h5 class="modal-title" id="orderEditModalLabel">
       <i class="bi bi-pencil-square me-2"></i> Editar Pedido
     </h5>
@@ -22,15 +22,15 @@
       {% endfor %}
     </div>
 
-    <div class="card mb-4 shadow-sm border-0"> {# Remove a borda padrão do card #}
-      <div class="card-header bg-light border-bottom-0 rounded-top"> {# Remove borda inferior, arredonda topo #}
-        <h6 class="mb-0 text-primary"><i class="bi bi-info-circle me-2"></i>Informações Essenciais</h6>
+    <div class="card mb-4 shadow-sm border-0">
+      <div class="card-header bg-light border-bottom-0 rounded-top">
+        <h6 class="mb-0 text-primary"><i class="bi bi-info-circle me-2"></i> Informações Essenciais</h6>
       </div>
       <div class="card-body">
-        <div class="row g-3"> {# Espaçamento maior entre colunas #}
-          <div class="col-md-3"> {# Colunas sem mb-3 para usar g-3 #}
+        <div class="row g-3">
+          <div class="col-md-3">
             <label for="{{ form.order_number.id_for_label }}" class="form-label fw-bold">Nº do Pedido</label>
-            {% render_field form.order_number class="form-control" %}
+            {% render_field form.order_number class="form-control" placeholder="Ex: 12345" %}
             {% if form.order_number.errors %}
               <div class="invalid-feedback d-block">
                 {% for error in form.order_number.errors %}
@@ -39,7 +39,18 @@
               </div>
             {% endif %}
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
+            <label for="{{ form.type_order.id_for_label }}" class="form-label fw-bold">Tipo de Venda</label>
+            {% render_field form.type_order class="form-select" %}
+            {% if form.type_order.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.type_order.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          <div class="col-md-3">
             <label for="{{ form.payment_status.id_for_label }}" class="form-label fw-bold">Status do Pagamento</label>
             {% render_field form.payment_status class="form-select" %}
             {% if form.payment_status.errors %}
@@ -50,7 +61,7 @@
               </div>
             {% endif %}
           </div>
-          <div class="col-md-5">
+          <div class="col-md-3">
             <label for="{{ form.delivery_status.id_for_label }}" class="form-label fw-bold">Status da Entrega</label>
             {% render_field form.delivery_status class="form-select" %}
             {% if form.delivery_status.errors %}
@@ -62,13 +73,14 @@
             {% endif %}
           </div>
         </div>
-        <div class="row g-3 mt-3"> {# Adiciona margem superior para espaçar as linhas #}
+
+        <div class="row g-3 mt-3">
           <div class="col-md-4">
-            <label for="{{ form.type_order.id_for_label }}" class="form-label fw-bold">Tipo de Venda</label>
-            {% render_field form.type_order class="form-select" %}
-            {% if form.type_order.errors %}
+            <label for="{{ form.courier.id_for_label }}" class="form-label fw-bold">Entregador</label>
+            {% render_field form.courier class="form-select" %}
+            {% if form.courier.errors %}
               <div class="invalid-feedback d-block">
-                {% for error in form.type_order.errors %}
+                {% for error in form.courier.errors %}
                   {{ error }}
                 {% endfor %}
               </div>
@@ -76,10 +88,27 @@
           </div>
           <div class="col-md-4">
             <label for="{{ form.total_amount.id_for_label }}" class="form-label fw-bold">Valor Total</label>
-            {% render_field form.total_amount class="form-control" placeholder="R$ 0,00" %}
+            <div class="input-group">
+              <span class="input-group-text">R$</span>
+              {% render_field form.total_amount class="form-control" placeholder="0,00" aria-label="Valor Total" %}
+            </div>
             {% if form.total_amount.errors %}
               <div class="invalid-feedback d-block">
                 {% for error in form.total_amount.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          <div class="col-md-4">
+            <label for="{{ form.delivery_fee.id_for_label }}" class="form-label fw-bold">Valor da Entrega</label>
+            <div class="input-group">
+              <span class="input-group-text">R$</span>
+              {% render_field form.delivery_fee class="form-control" placeholder="0,00" aria-label="Valor da Entrega" %}
+            </div>
+            {% if form.delivery_fee.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.delivery_fee.errors %}
                   {{ error }}
                 {% endfor %}
               </div>
@@ -91,12 +120,12 @@
 
     <div class="card mb-4 shadow-sm border-0">
       <div class="card-header bg-light border-bottom-0 rounded-top">
-        <h6 class="mb-0 text-primary"><i class="bi bi-chat-dots me-2"></i>Observações</h6>
+        <h6 class="mb-0 text-primary"><i class="bi bi-chat-dots me-2"></i> Observações</h6>
       </div>
       <div class="card-body">
-        <div class="mb-0"> {# mb-0 para remover margem inferior se for o último item #}
+        <div class="mb-0">
           <label for="{{ form.observations.id_for_label }}" class="form-label visually-hidden">Observações</label>
-          {% render_field form.observations class="form-control" rows="4" placeholder="Insira quaisquer instruções ou observações adicionais aqui..." %} {# Aumenta para 4 linhas #}
+          {% render_field form.observations class="form-control" rows="4" placeholder="Insira quaisquer instruções ou observações adicionais aqui, como detalhes de entrega ou preferências do cliente." %}
           {% if form.observations.errors %}
             <div class="invalid-feedback d-block">
               {% for error in form.observations.errors %}
@@ -108,14 +137,14 @@
       </div>
     </div>
 
-  </div> {# Fim do modal-body #}
+  </div>
 
-  <div class="modal-footer bg-light border-top"> {# Fundo claro e borda superior #}
-    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"> {# Botão de contorno #}
-      <i class="bi bi-x-circle me-2"></i>Cancelar
+  <div class="modal-footer bg-light border-top">
+    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+      <i class="bi bi-x-circle me-2"></i> Cancelar
     </button>
     <button type="submit" class="btn btn-primary">
-      <i class="bi bi-check-circle me-2"></i>Salvar Alterações
+      <i class="bi bi-check-circle me-2"></i> Salvar Alterações
     </button>
   </div>
 </form>

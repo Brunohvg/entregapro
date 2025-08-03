@@ -2,6 +2,7 @@
 
 from django.db import models
 from apps.customers.models import Customer
+from apps.couriers.models import Courier
 from django.db.models import Sum
 from django.utils import timezone
 
@@ -30,6 +31,7 @@ class PaymentStatus(models.TextChoices):
 
 class Order(models.Model):  # TABELA PEDIDO
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    courier = models.ForeignKey(Courier, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders', verbose_name='Entregador')
     order_number = models.CharField(max_length=50, unique=True, verbose_name='Nº Pedido')
     observations = models.CharField(max_length=250, blank=True, null=True, verbose_name='Observações' )    
     payment_status = models.CharField(
@@ -45,6 +47,7 @@ class Order(models.Model):  # TABELA PEDIDO
         verbose_name='Status Entrega' # Adicionado verbose_name aqui
     )
     type_order = models.CharField(max_length=20, choices=TypeOrder.choices, default=TypeOrder.DELIVERY, verbose_name='Tipo de Pedido')
+    delivery_fee = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Taxa de Entrega")
     total_amount = models.FloatField(verbose_name='Valor Total') # Adicionado verbose_name
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado Em') # Adicionado verbose_name
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado Em') # Adicionado verbose_name

@@ -33,7 +33,7 @@ class CustomerForm(ModelForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['street', 'number', 'complement', 'neighborhood', 'city', 'postal_code', 'reference']
+        fields = ['street', 'number', 'complement', 'neighborhood', 'city', 'postal_code', 'reference', 'state', ]
 
     def __init__(self, *args, **kwargs):
         self.customer = kwargs.pop('customer', None)
@@ -52,6 +52,7 @@ class AddressForm(forms.ModelForm):
         neighborhood = normalize(cleaned_data.get('neighborhood'))
         city = normalize(cleaned_data.get('city'))
         postal_code = normalize(cleaned_data.get('postal_code'))
+        state = normalize(cleaned_data.get('state'))
 
         if self.customer:
             existing = Address.objects.filter(customer=self.customer)
@@ -62,7 +63,9 @@ class AddressForm(forms.ModelForm):
                     normalize(addr.complement) == complement and
                     normalize(addr.neighborhood) == neighborhood and
                     normalize(addr.city) == city and
+                    normalize(addr.state) == state and
                     normalize(addr.postal_code) == postal_code
+                    
                 ):
                     raise ValidationError("Este endereço já foi cadastrado para este cliente.")
 

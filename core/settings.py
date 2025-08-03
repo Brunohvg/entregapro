@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django.contrib.humanize',
     'apps.dashboard', 
+    'apps.couriers'
 
 ]
 
