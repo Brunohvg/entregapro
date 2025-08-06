@@ -11,13 +11,14 @@ def input_widget(placeholder):
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        fields = ['full_name', 'nickname', 'phone', 'email', 'document']
+        fields = ['full_name', 'nickname', 'phone', 'email', 'document', 'observations']
         labels = {
             'full_name': 'Nome Completo',
             'nickname': 'Nome ou Apelido',
             'phone': 'Celular',
             'email': 'E-mail',
             'document': 'CPF ou CNPJ',
+            'observations': 'Observações',
         }
         widgets = {
             'full_name': input_widget('Nome completo'),
@@ -25,6 +26,7 @@ class CustomerForm(ModelForm):
             'phone': input_widget('(99) 99999-9999'),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'cliente@email.com'}),
             'document': input_widget('000.000.000-00'),
+            'observations': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Observações sobre o cliente'}),
         }
 
 

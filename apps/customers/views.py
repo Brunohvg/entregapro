@@ -31,8 +31,7 @@ class CustomerCreateView(CreateView):
     model = Customer
     context_object_name = 'customer'
     template_name = 'customers/hx/customer_createad_form_hx.html'
-    fields = ['full_name', 'nickname', 'document', 'email', 'phone']
-
+    fields = ['full_name', 'nickname', 'document', 'email', 'phone', 'observations']
     message = "Cliente criado com sucesso!"
 
 
@@ -47,4 +46,3 @@ class CustomerCreateView(CreateView):
         response = HttpResponse(status=204)  # 204 No Content é uma boa prática aqui
         response['HX-Redirect'] = self.get_success_url()
         return response
-    

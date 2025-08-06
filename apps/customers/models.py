@@ -9,6 +9,7 @@ class Customer(models.Model): # TABELA CLIENTE
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
     spent_total = models.FloatField(default=0.0, blank=True, null=True, verbose_name='Total Gasto')
+    observations = models.TextField(blank=True, null=True, verbose_name='Observações')
 
     def __str__(self):
         return self.full_name
