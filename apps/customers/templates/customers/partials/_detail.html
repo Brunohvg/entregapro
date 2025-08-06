@@ -1,0 +1,162 @@
+
+{% load static %}
+<div class="card bg-light-info shadow-none position-relative overflow-hidden">
+  <div class="card-body px-4 py-3">
+    <div class="row align-items-center">
+      <div class="col-9">
+        <h4 class="fw-semibold mb-8">Perfil do Cliente</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a class="text-muted text-decoration-none" href="{% url 'dashboard:home' %}">Início</a> {# Ajuste se necessário #}
+            </li>
+            <li class="breadcrumb-item">
+                <a class="text-muted text-decoration-none" href="{% url 'customers:customer_list' %}">Lista de Clientes</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ customer.full_name }}
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-3 text-center">
+          <img src="{% static 'images/backgrounds/ChatBc.png' %}" alt="Perfil" class="img-fluid mb-n4">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-body">
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <a href="#" class="btn btn-primary"> {# URL para criar pedido para este cliente #}
+            <i class="ti ti-plus me-1"></i> Novo Pedido
+        </a>
+        <a href="#" class="btn btn-outline-warning">
+            <i class="ti ti-pencil me-1"></i> Editar Cliente
+        </a>
+        <div class="ms-auto">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="moreActions" data-bs-toggle="dropdown" aria-expanded="false">
+                    Mais Ações
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="moreActions">
+                    <li><a class="dropdown-item" href="#">Exportar Dados</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">Excluir Cliente</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+
+  <div class="col-lg-4 col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center mb-4">
+            <img src="https://ui-avatars.com/api/?name={{ customer.full_name|urlencode }}&background=random&size=100&rounded=true" alt="Avatar" class="img-fluid rounded-circle">
+            <h5 class="mt-3">{{ customer.full_name }}</h5>
+            <p class="text-muted">{{ customer.nickname|default:customer.document }}</p>
+        </div>
+
+        <h5 class="card-title fw-semibold mb-3">Informações de Contato</h5>
+        <ul class="list-unstyled">
+          <li class="d-flex align-items-center mb-2">
+            <i class="ti ti-phone-call fs-5 text-dark me-2"></i> {{ customer.phone }}
+          </li>
+          <li class="d-flex align-items-center mb-3">
+            <i class="ti ti-mail fs-5 text-dark me-2"></i> {{ customer.email|default:"Não informado" }}
+          </li>
+        </ul>
+        
+        <hr>
+
+        <h5 class="card-title fw-semibold mb-3">Dados do Sistema</h5>
+        <ul class="list-unstyled">
+          <li class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Total Gasto:</span>
+            <span class="fw-bold fs-5 text-success">R$ {{ customer.spent_total|floatformat:2 }}</span>
+          </li>
+          <li class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Cliente desde:</span>
+            <span>{{ customer.created_at|date:"d/m/Y" }}</span>
+          </li>
+          <li class="d-flex justify-content-between">
+            <span class="text-muted">Última atualização:</span>
+            <span>{{ customer.updated_at|date:"d/m/Y" }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8 col-md-12">
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="addresses-tab" data-bs-toggle="tab" data-bs-target="#addresses" type="button" role="tab" aria-controls="addresses" aria-selected="true">Endereços</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false">Histórico de Pedidos</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                
+                <div class="tab-pane fade show active" id="addresses" role="tabpanel" aria-labelledby="addresses-tab">
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-3">
+                      <h5 class="card-title fw-semibold">Endereços Cadastrados</h5>
+                      <a href="#" class="btn btn-sm btn-primary">Adicionar Novo</a>
+                    </div>
+                    {% for address in customer.addresses.all %}
+                      <div class="card shadow-none border mb-2">
+                        <div class="card-body">
+                          <div class="d-flex align-items-start">
+                            <div>
+                              <p class="mb-1 fw-bold">{{ address.street }}, {{ address.number }}</p>
+                              <p class="mb-1 text-muted">{{ address.neighborhood }} - {{ address.city }}/{{ address.state }}</p>
+                              {% if address.is_primary %}<span class="badge bg-light-primary text-primary">Principal</span>{% endif %}
+                            </div>
+                            <div class="ms-auto">
+                              <a href="#" class="btn btn-sm btn-outline-secondary" title="Editar Endereço"><i class="ti ti-pencil"></i></a>
+                              <a href="#" class="btn btn-sm btn-outline-danger" title="Excluir Endereço"><i class="ti ti-trash"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% empty %}
+                      <div class="alert alert-light-warning text-warning mt-3">Este cliente não possui endereços.</div>
+                    {% endfor %}
+                </div>
+
+                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-3">
+                      <h5 class="card-title fw-semibold">Pedidos Realizados</h5>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead><tr><th>Nº Pedido</th><th>Data</th><th>Status</th><th class="text-end">Valor</th></tr></thead>
+                        <tbody>
+                          {% for order in customer.orders.all %} {# Supondo que você tenha a relação 'orders' no seu modelo Customer #}
+                            <tr>
+                              <td><a href="{% url 'orders:order_detail' order.id %}">#{{ order.order_number }}</a></td>
+                              <td>{{ order.created_at|date:"d/m/Y" }}</td>
+                              <td><span class="badge bg-light-success text-success">{{ order.get_delivery_status_display }}</span></td>
+                              <td class="text-end">R$ {{ order.total_amount|floatformat:2 }}</td>
+                            </tr>
+                          {% empty %}
+                            <tr><td colspan="4" class="text-center py-4">Nenhum pedido encontrado para este cliente.</td></tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

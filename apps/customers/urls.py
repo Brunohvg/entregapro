@@ -10,6 +10,6 @@ urlpatterns = [
     # URL para a tela de detalhes
     path('<int:pk>/', views.CustomerDetailView.as_view(), name='customer_detail'),
     # ... outras urls
-    # path('create/', views.customer_create_view, name='customer_create'),
+    path('create/', views.CustomerCreateView.as_view(), name='customer_create'),
     # path('<int:id>/update/', views.customer_update_view, name='customer_update'),
 ]

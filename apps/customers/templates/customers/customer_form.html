@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Criar Cliente</h2>
+  <form method="post">
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </form>
+{% endblock %}
