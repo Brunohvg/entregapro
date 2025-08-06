@@ -10,5 +10,6 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),  # Inclui as URLs da aplicação 'accounts'
     path('orders/', include('apps.orders.urls')), # Inclui as URLs da aplicação 'orders'
     path('dashboard/', include('apps.dashboard.urls')), 
+    path('customers/', include('apps.customers.urls')),  # Inclui as URLs da aplicação 'customers'
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
