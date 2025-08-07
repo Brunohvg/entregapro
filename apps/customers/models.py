@@ -6,6 +6,7 @@ class Customer(models.Model): # TABELA CLIENTE
     document = models.CharField(max_length=50, unique=True, verbose_name='Cpf ou Cnpj')
     phone = models.CharField(max_length=50, verbose_name='Celular')
     email = models.EmailField(unique=True, blank=True, null=True, verbose_name='E-mail')
+    # Campos de data de criação e atualização
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
     spent_total = models.FloatField(default=0.0, blank=True, null=True, verbose_name='Total Gasto')
