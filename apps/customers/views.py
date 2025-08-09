@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Customer
 from django.db.models import Q
+from apps.customers.forms import CustomerForm
 
 class CustomerListView(ListView):
     model = Customer
@@ -44,5 +45,20 @@ class CustomerCreateView(CreateView):
         # Retorna uma resposta vazia ou um fragmento simples,
         # e usa os cabeçalhos HTMX para instruir o navegador a redirecionar
         response = HttpResponse(status=204)  # 204 No Content é uma boa prática aqui
+        response['HX-Redirect'] = self.get_success_url()
+        return response
+
+class CustomerUpdateView(UpdateView):
+    model = Customer
+    form_class = CustomerForm
+    context_object_name = 'customer'
+    template_name = 'customers/hx/customer_update_form_hx.html'
+
+    def get_success_url(self):
+        return reverse_lazy('customers:customer_list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        response = HttpResponse(status=204)  # No Content
         response['HX-Redirect'] = self.get_success_url()
         return response

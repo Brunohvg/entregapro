@@ -1,6 +1,5 @@
 from apps.customers.models import Address
-
-
+from apps.customers.models import Customer  
 
 
 
@@ -54,3 +53,5 @@ def handle_new_customer(form_customer, form_address, form_order):
     order.save()
 
     return True
+
+

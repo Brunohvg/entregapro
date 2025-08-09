@@ -28,12 +28,22 @@
 
 <div class="card card-body">
     <div class="d-flex flex-wrap align-items-center gap-2">
+
         <a href="#" class="btn btn-primary"> {# URL para criar pedido para este cliente #}
             <i class="ti ti-plus me-1"></i> Novo Pedido
         </a>
-        <a href="#" class="btn btn-outline-warning">
-            <i class="ti ti-pencil me-1"></i> Editar Cliente
-        </a>
+
+                        <!-- Editar -->
+          <a href="#" class="btn btn-outline-warning" 
+              data-bs-toggle="modal"
+              data-bs-target="#createdModal"
+              hx-get="{% url 'customers:customer_update' customer.pk %}"
+              hx-target="#createdContent"
+              hx-swap="innerHTML"
+              title="Editar Pedido">
+               <i class="ti ti-pencil me-1"></i> Editar Cliente
+          </a>
+   
         <div class="ms-auto">
             <div class="dropdown">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="moreActions" data-bs-toggle="dropdown" aria-expanded="false">

@@ -1,5 +1,3 @@
-# FUNCOES AUXILIARES.
-
 from apps.customers.models import Customer
 
 def get_customer_by_document(document):
