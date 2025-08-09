@@ -7,7 +7,7 @@ def generate_pdf(request, pk):
     order = Order.objects.get(pk=pk)
     address = order.customer.addresses.first()  # acessa o primeiro endereço do cliente
 
-    html_string = render_to_string("partials/order_label.html", {
+    html_string = render_to_string("partials/print_order_label.html", {
         "order": order,
         "primary_address": address
     })
