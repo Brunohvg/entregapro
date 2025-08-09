@@ -83,13 +83,7 @@ OBJETIVO: Renderizar a página completa com a lista de clientes.
             <a href="{% url 'customers:customer_detail' customer.id %}" class="btn btn-outline-primary btn-sm" title="Ver Detalhes">
               <i class="ti ti-eye fs-5"></i>
             </a>
-            <a href="#" 
-               class="btn btn-outline-warning btn-sm"
-               title="Editar Cliente">
-              {# Exemplo com HTMX (se estiver usando) #}
-              {# hx-get="{% url 'customers:customer_update' customer.pk %}" hx-target="#modal-content" #}
-              <i class="ti ti-pencil fs-5"></i>
-            </a>
+
             <a href="#" 
                class="btn btn-outline-danger btn-sm"
                title="Excluir Cliente"

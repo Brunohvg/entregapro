@@ -12,5 +12,5 @@ urlpatterns = [
     # ... outras urls
     path('create/', views.CustomerCreateView.as_view(), name='customer_create'),
     path('<int:pk>/update/', views.CustomerUpdateView.as_view(), name='customer_update'),
-    # path('<int:id>/update/', views.customer_update_view, name='customer_update'),
+    path('<int:pk>/address/update/', views.CustomerAdressUpdateView.as_view(), name='customer_address_update'),
 ]

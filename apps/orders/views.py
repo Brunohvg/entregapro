@@ -21,8 +21,6 @@ from apps.customers.utils.customers import get_customer_by_document
 from apps.customers.models import Customer
 from apps.orders.utils.generate_pdf import generate_pdf
 
-
-
 @method_decorator(login_required, name='dispatch')
 class OrderListView(ListView):
     model = Order

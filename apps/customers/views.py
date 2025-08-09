@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .models import Customer
+from .models import Customer, Address
 from django.db.models import Q
-from apps.customers.forms import CustomerForm
+from apps.customers.forms import CustomerForm, AddressForm
 
 class CustomerListView(ListView):
     model = Customer
@@ -55,7 +55,22 @@ class CustomerUpdateView(UpdateView):
     template_name = 'customers/hx/customer_update_form_hx.html'
 
     def get_success_url(self):
-        return reverse_lazy('customers:customer_list')
+        return reverse_lazy('customers:customer_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        self.object = form.save()
+        response = HttpResponse(status=204)  # No Content
+        response['HX-Redirect'] = self.get_success_url()
+        return response
+    
+class CustomerAdressUpdateView(UpdateView):
+    model = Customer
+    form_class = AddressForm
+    context_object_name = 'address'
+    template_name = 'customers/teste.html'
+
+    def get_success_url(self):
+        return reverse_lazy('customers:customer_detail', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         self.object = form.save()
