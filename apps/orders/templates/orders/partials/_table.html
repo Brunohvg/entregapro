@@ -80,9 +80,9 @@ OBJETIVO: Renderizar APENAS a tabela com a lista de pedidos.
           <!-- Editar -->
           <a href="#" class="btn btn-outline-warning btn-sm" 
               data-bs-toggle="modal"
-              data-bs-target="#updateModal"
+              data-bs-target="#mainModal"
               hx-get="{% url 'orders:order_update' order.pk %}"
-              hx-target="#updateContent"
+              hx-target="#mainModalContent"
               hx-swap="innerHTML"
               title="Editar Pedido">
             <i class="ti ti-pencil fs-5 me-1"></i>

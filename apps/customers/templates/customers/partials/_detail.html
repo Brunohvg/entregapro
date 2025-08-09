@@ -33,16 +33,16 @@
             <i class="ti ti-plus me-1"></i> Novo Pedido
         </a>
 
-                        <!-- Editar -->
-          <a href="#" class="btn btn-outline-warning" 
-              data-bs-toggle="modal"
-              data-bs-target="#createdModal"
-              hx-get="{% url 'customers:customer_update' customer.pk %}"
-              hx-target="#createdContent"
-              hx-swap="innerHTML"
-              title="Editar Pedido">
-               <i class="ti ti-pencil me-1"></i> Editar Cliente
-          </a>
+<a href="#" class="btn btn-outline-warning" 
+    data-bs-toggle="modal"
+    data-bs-target="#mainModal"
+    hx-get="{% url 'customers:customer_update' customer.pk %}" 
+    hx-target="#mainModalContent" 
+    hx-swap="innerHTML"
+    title="Editar Pedido">
+     <i class="ti ti-pencil me-1"></i> Editar Cliente
+</a>
+
    
         <div class="ms-auto">
             <div class="dropdown">

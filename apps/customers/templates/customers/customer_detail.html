@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Detalhes do cliente{% endblock %}
+
 {% block content %}
 {% include 'customers/partials/_detail.html' %}
-{% include 'customers/includes/_modals.html' %}
+{% include 'partials/_modal.html' %}
+
 {% endblock content %}

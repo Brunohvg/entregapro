@@ -37,9 +37,9 @@ OBJETIVO: Renderizar a página completa com a lista de clientes.
     <div class="col-md-8 col-xl-9 d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
           <a href="#" class="btn btn-primary d-flex align-items-center ms-2" 
               data-bs-toggle="modal"
-              data-bs-target="#createdModal"
+              data-bs-target="#mainModal"
               hx-get="{% url 'customers:customer_create'%}"
-              hx-target="#createdContent"
+              hx-target="#mainModalContent"
               hx-swap="innerHTML"
               title="Editar Pedido">
               <i class="ti ti-plus text-white me-1 fs-5"></i> Cadastrar Novo Cliente

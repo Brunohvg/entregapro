@@ -1,5 +1,5 @@
 <form method="post" hx-post="{% url 'orders:order_update' object.pk %}"
-      hx-target="#updateContent" hx-swap="innerHTML"
+      hx-target="#mainModalContent" hx-swap="innerHTML"
       class="needs-validation" novalidate>
   {% csrf_token %}
   {% load widget_tweaks %}
