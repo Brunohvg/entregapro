@@ -42,7 +42,7 @@ def user_register(request):
             login(request, user) # Faz o login do usuário automaticamente após o registro
             messages.success(request, f"Sua conta foi criada com sucesso, {user.username}!")
             # Redireciona para o dashboard após o registro bem-sucedido
-            return redirect('core:dashboard')
+            return redirect('dashboard:home')
         else:
             # Se o formulário não for válido, as mensagens de erro estarão no próprio formulário
             messages.error(request, "Erro ao registrar. Por favor, corrija os erros abaixo.")
