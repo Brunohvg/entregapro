@@ -1,10 +1,11 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Customer, Address
 from django.db.models import Q
 from apps.customers.forms import CustomerForm, AddressForm
-
+from apps.customers.utils.customers import get_address_by_customer
 class CustomerListView(ListView):
     model = Customer
     template_name = 'customers/customer_list.html'
@@ -64,11 +65,15 @@ class CustomerUpdateView(UpdateView):
         return response
     
 class CustomerAdressUpdateView(UpdateView):
-    model = Customer
+    model = Address
     form_class = AddressForm
     context_object_name = 'address'
     template_name = 'customers/teste.html'
 
+    def get_object(self, queryset=None):
+        customer_id = self.kwargs.get("pk")  # ID do cliente vindo da URL
+        return get_address_by_customer(customer_id=customer_id)
+    
     def get_success_url(self):
         return reverse_lazy('customers:customer_detail', kwargs={'pk': self.object.pk})
 
@@ -77,3 +82,10 @@ class CustomerAdressUpdateView(UpdateView):
         response = HttpResponse(status=204)  # No Content
         response['HX-Redirect'] = self.get_success_url()
         return response
+
+class CustomerAddressCreateVIews(CreateView):
+    model = Customer
+    context_object_name = 'address'
+    template_name = 'customers/hx/customer_createad_form_hx.html'
+    fields = ['full_name', 'nickname', 'document', 'email', 'phone', 'observations']
+    message = "Cliente criado com sucesso!"

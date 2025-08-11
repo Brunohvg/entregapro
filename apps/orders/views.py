@@ -97,7 +97,6 @@ class OrderDetailView(DetailView):
 
         return context
 
-
 @method_decorator(login_required, name='dispatch')
 class OrderUpdateView(UpdateView):
     model = Order
@@ -123,7 +122,6 @@ class OrderUpdateView(UpdateView):
 class OrderDeleteView(DeleteView):
     model = Order
     
-
 def generate_label_pdf(request, pk):
     return generate_pdf(request, pk)
 

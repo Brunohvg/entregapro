@@ -1,13 +1,15 @@
-from apps.customers.models import Customer
+import re
+from apps.customers.models import Customer, Address
 
 def get_customer_by_document(document):
-    """
-    Retorna o primeiro cliente com o documento informado.
+    """Busca cliente pelo documento, retorna ou None."""
+    clean_doc = re.sub(r'\D', '', document)
+    return Customer.objects.filter(document=clean_doc).first()
 
-    Args:
-        document (str): Documento (CPF ou CNPJ) do cliente.
+def get_customer_by_id(customer_id):
+    """Busca cliente pelo ID, retorna ou None."""
+    return Customer.objects.filter(pk=customer_id).first()
 
-    Returns:
-        Customer or None: Instância de Customer se encontrado, senão None.
-    """
-    return Customer.objects.filter(document=document).first()
+def get_address_by_customer(customer_id):
+    """Busca endereço pelo ID do cliente, retorna ou None."""
+    return Address.objects.filter(customer_id=customer_id).first()
