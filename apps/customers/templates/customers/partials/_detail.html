@@ -119,7 +119,18 @@
                 <div class="tab-pane fade show active" id="addresses" role="tabpanel" aria-labelledby="addresses-tab">
                     <div class="d-flex align-items-center justify-content-between mt-4 mb-3">
                       <h5 class="card-title fw-semibold">Endereços Cadastrados</h5>
-                      <a href="#" class="btn btn-sm btn-primary">Adicionar Novo</a>
+                    <a href="#" class="btn btn-sm btn-primary" 
+                      data-bs-toggle="modal"
+                      data-bs-target="#mainModal"
+                      hx-get="{% url 'customers:create_address' customer.pk %}" 
+                      hx-target="#mainModalContent" 
+                      hx-swap="innerHTML"
+                      title="Adicionar Endereço">
+                      <i class="ti ti-pencil me-1"></i>Adicionar Novo
+                    </a>
+
+
+          
                     </div>
                     {% for address in customer.addresses.all %}
                       <div class="card shadow-none border mb-2">

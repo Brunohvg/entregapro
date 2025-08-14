@@ -1,0 +1,137 @@
+{% load widget_tweaks %}
+{% load static %}
+<div class="modal-body">
+    <form method="post" 
+          hx-post="{% url 'customers:create_address' customer.pk %}" 
+          hx-target="#mainModalContent" 
+          hx-swap="innerHTML"
+          class="needs-validation" novalidate>
+        {% csrf_token %}
+
+  <div class="card mb-4 shadow-sm border-0">
+    <div class="card-header bg-light border-bottom-0 rounded-top">
+      <h6 class="mb-0 text-primary"><i class="bi bi-geo-alt-fill me-2"></i> Endereço de Entrega - {{ customer }}</h6>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="{{ form_address.postal_code.id_for_label }}" class="form-label fw-bold">CEP</label>
+          {% render_field form_address.postal_code class="form-control" placeholder="00000-000" id="id_cep" %}
+          {% if form_address.postal_code.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.postal_code.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-7">
+          <label for="{{ form_address.street.id_for_label }}" class="form-label fw-bold">Rua</label>
+          {% render_field form_address.street class="form-control" id="id_rua" placeholder="Nome da rua ou avenida" %}
+          {% if form_address.street.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.street.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-2">
+          <label for="{{ form_address.number.id_for_label }}" class="form-label fw-bold">Número</label>
+          {% render_field form_address.number class="form-control" placeholder="Ex: 123" %}
+          {% if form_address.number.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.number.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form_address.neighborhood.id_for_label }}" class="form-label fw-bold">Bairro</label>
+          {% render_field form_address.neighborhood class="form-control" id="id_bairro" placeholder="Nome do bairro" %}
+          {% if form_address.neighborhood.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.neighborhood.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form_address.city.id_for_label }}" class="form-label fw-bold">Cidade</label>
+          {% render_field form_address.city class="form-control" id="id_cidade" placeholder="Nome da cidade" %}
+          {% if form_address.city.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.city.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+          <label for="{{ form_address.state.id_for_label }}" class="form-label fw-bold">Estado</label> {# Adicionado campo de estado, se existir no seu form_address #}
+          {% render_field form_address.state class="form-control" id="id_estado" placeholder="Nome do estado" %}
+          {% if form_address.state.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.state.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_address.complement.id_for_label }}" class="form-label fw-bold">Complemento</label>
+          {% render_field form_address.complement class="form-control" placeholder="Apto, Bloco, Casa fundos, etc." %}
+          {% if form_address.complement.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.complement.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-md-6">
+          <label for="{{ form_address.reference.id_for_label }}" class="form-label fw-bold">Ponto de Referência</label>
+          {% render_field form_address.reference class="form-control" placeholder="Próximo a..." %}
+          {% if form_address.reference.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form_address.reference.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("id_cep").addEventListener("blur", function() {
+  const cep = this.value.replace(/\D/g, "");
+  if (cep.length === 8) {
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      .then(response => response.json())
+      .then(data => {
+        if (!("erro" in data)) {
+          document.getElementById("id_rua").value = data.logradouro;
+          document.getElementById("id_bairro").value = data.bairro;
+          document.getElementById("id_cidade").value = data.localidade;
+          // Adiciona o preenchimento do estado, se o campo existir e o ViaCEP retornar
+          if (document.getElementById("id_estado") && data.uf) {
+            document.getElementById("id_estado").value = data.uf;
+          }
+        } else {
+          alert("CEP não encontrado.");
+        }
+      })
+      .catch(() => {
+        alert("Erro ao buscar CEP. Verifique sua conexão ou tente novamente.");
+      });
+  }
+});
+</script>
