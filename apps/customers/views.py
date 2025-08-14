@@ -111,14 +111,15 @@ def create_address_customer(request, pk):
         street = request.POST.get('street')
         number = request.POST.get('number')
         # Verifica se já existe um endereço com esse CEP para esse cliente
-        if Address.objects.filter(customer=customer, street=street).exists() or Address.objects.filter(customer=customer, number=number).exists():
-            # Retorna uma mensagem de erro ou renderiza o formulário com aviso
-            form.add_error('street', 'Este endereço já está cadastrado para este cliente.')
+
+        if Address.objects.filter(customer=customer, street=street, number=number).exists():
+            form.add_error('number', 'Este endereço já está cadastrado para este cliente.')
             return render(
                 request,
                 'customers/hx/form_address.html',
                 {'form_address': form, 'customer': customer}
             )
+
 
         if form.is_valid():
             address = form.save(commit=False)
